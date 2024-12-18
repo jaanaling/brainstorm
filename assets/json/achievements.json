@@ -1,0 +1,67 @@
+[
+    {
+      "id": "complete_first_puzzle",
+      "title": "First Steps",
+      "description": "Complete your first puzzle",
+      "coin_reward": 10,
+      "unlocked": false
+    },
+    {
+      "id": "rich_player",
+      "title": "Rich Player",
+      "description": "Collect 100 coins",
+      "coin_reward": 20,
+      "unlocked": false
+    },
+    {
+      "id": "fifty_points",
+      "title": "Half Century",
+      "description": "Earn at least 50 points",
+      "coin_reward": 15,
+      "unlocked": false
+    },
+    {
+      "id": "ten_puzzles_done",
+      "title": "Puzzle Enthusiast",
+      "description": "Complete 10 puzzles",
+      "coin_reward": 25,
+      "unlocked": false
+    },
+    {
+      "id": "buy_hint",
+      "title": "Clever Spender",
+      "description": "Buy at least one hint",
+      "coin_reward": 5,
+      "unlocked": false
+    },
+    {
+      "id": "solve_hard_puzzle",
+      "title": "Tough One",
+      "description": "Complete a puzzle with difficulty 4",
+      "coin_reward": 30,
+      "unlocked": false
+    },
+    {
+      "id": "100_coins",
+      "title": "Wealthy",
+      "description": "Reach 100 coins",
+      "coin_reward": 20,
+      "unlocked": false
+    },
+    {
+      "id": "3_hints",
+      "title": "Hint Collector",
+      "description": "Buy 3 hints in total",
+      "coin_reward": 10,
+      "unlocked": false
+    },
+    {
+      "id": "finish_level_1",
+      "title": "Level 1 Champion",
+      "description": "Complete all puzzles of level 1",
+      "coin_reward": 40,
+      "unlocked": false
+    }
+  
+  ]
+  
