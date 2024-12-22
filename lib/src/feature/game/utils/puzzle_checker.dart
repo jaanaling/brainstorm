@@ -58,8 +58,8 @@ bool checkMathEquation(int userAnswer, int correctAnswer) {
   return userAnswer == correctAnswer;
 }
 
-bool checkAnagramSolution(String userSolution, List<String> validWords) {
-  return validWords.contains(userSolution);
+bool checkAnagramSolution(String userSolution, String validWords) {
+  return validWords ==userSolution;
 }
 
 bool checkTowerOfHanoiSolution(List<List<int>> finalState, List<List<int>> goalState) {

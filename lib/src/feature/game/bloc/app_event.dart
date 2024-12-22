@@ -12,11 +12,12 @@ class LoadData extends AppEvent {}
 class CheckPuzzleSolution extends AppEvent {
   final String puzzleId;
   final dynamic userSolution;
+  final Function(PuzzleStatus) callback;
 
-  const CheckPuzzleSolution(this.puzzleId, this.userSolution);
+  const CheckPuzzleSolution(this.puzzleId, this.userSolution, this.callback);
 
   @override
-  List<Object?> get props => [puzzleId, userSolution];
+  List<Object?> get props => [puzzleId, userSolution, callback];
 }
 
 class ClaimAchievement extends AppEvent {
@@ -28,3 +29,10 @@ class ClaimAchievement extends AppEvent {
 }
 
 class BuyHint extends AppEvent {}
+
+class UseHint extends AppEvent {
+  final String puzzleId;
+  const UseHint(this.puzzleId);
+  @override
+  List<Object?> get props => [puzzleId];
+}

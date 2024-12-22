@@ -27,4 +27,11 @@ class AppLoaded extends AppState {
   List<Object?> get props => [user, puzzles, achievements];
 }
 
-class AppCheckingPuzzle extends AppState {}
+class AppCheckingPuzzle extends AppState {
+    final List<Puzzle> puzzles;
+
+  const AppCheckingPuzzle(this.puzzles);
+  @override
+  List<Object?> get props => [puzzles];
+
+}

@@ -147,10 +147,11 @@ class LevelScreen extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () => context.push(
+        onTap: () => challenge.status == PuzzleStatus.unlocked
+            ? context.push(
           '${RouteValue.home.path}/${RouteValue.select.path}/${RouteValue.level.path}/${RouteValue.quiz.path}',
           extra: challenge.id,
-        ),
+        ) : null,
         borderRadius: BorderRadius.circular(32),
         child: Ink.image(
           width: MediaQuery.of(context).size.width * 0.12,
