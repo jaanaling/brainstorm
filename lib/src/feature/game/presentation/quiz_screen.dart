@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:brainstorm_quest/ui_kit/app_button/app_button.dart';
+import 'package:brainstorm_quest/src/core/utils/app_icon.dart';
 import 'package:brainstorm_quest/ui_kit/app_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +66,8 @@ class _QuizScreenState extends State<QuizScreen> {
     super.dispose();
   }
 
+  bool? isLoose;
+
   void _showLoseDialog() {
     final appState = context.read<AppBloc>().state;
     if (appState is! AppLoaded) return;
@@ -74,7 +77,7 @@ class _QuizScreenState extends State<QuizScreen> {
     for (int i = 0; i < puzzle.attempts; i++) {
       context.read<AppBloc>().add(CheckPuzzleSolution(puzzle.id, null, (_) {}));
     }
-    _showPuzzleResultDialog(false, puzzle);
+    // _showPuzzleResultDialog(false, puzzle);
   }
 
   void _useHint(User user) {
@@ -103,41 +106,107 @@ class _QuizScreenState extends State<QuizScreen> {
                 state.puzzles.firstWhere((p) => p.id == widget.puzzleId);
             _initSumOfNumbersIfNeeded(puzzle);
 
-            return SafeArea(
-              child: Column(
-                children: [
-                  _buildHeader(puzzle, state.user),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                SafeArea(
+                  child: Column(
+                    children: [
+                      _buildHeader(puzzle, state.user),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              const Gap(20),
+                              _buildInstructions(puzzle),
+                              const Gap(40),
+                              _buildPuzzleContainer(puzzle),
+                              const Gap(20),
+                              if (isError)
+                                const TextWithBorder(
+                                  text: 'Incorrect, try again!',
+                                  borderColor: Colors.red,
+                                  fontSize: 20,
+                                ),
+                              const Gap(20),
+                              if (isHintUsed)
+                                TextWithBorder(
+                                  text: 'Hint: ${puzzle.hints}',
+                                  borderColor: Colors.black,
+                                  fontSize: 20,
+                                ),
+                              const Gap(20),
+                              _buildConfirmButtonIfNeeded(puzzle),
+                            ],
+                          ),
+                        ),
+                      ),
+                      _buildPuzzleKeyboard(puzzle),
+                    ],
+                  ),
+                ),
+                  Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        color: Colors.black.withOpacity(0.7799999833106995),
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height,
+                      ),
+                      Stack(
+                        clipBehavior: Clip.none,
+                        alignment: Alignment.topCenter,
                         children: [
-                          const Gap(20),
-                          _buildInstructions(puzzle),
-                          const Gap(40),
-                          _buildPuzzleContainer(puzzle),
-                          const Gap(20),
-                          if (isError)
-                            const TextWithBorder(
-                              text: 'Incorrect, try again!',
-                              borderColor: Colors.red,
-                              fontSize: 20,
+                          Positioned(
+                            top: -110,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 100),
+                              child: Transform(
+                                transform: Matrix4.rotationY(pi),  // Отражаем по оси Y
+                                alignment: Alignment.center,
+                                child: AppIcon(
+                                  asset: IconProvider.confetti.buildImageUrl(),
+                                  width: 134,
+                                  height: 169,
+                                ),
+                              ),
                             ),
-                          const Gap(20),
-                          if (isHintUsed)
-                            TextWithBorder(
-                              text: 'Hint: ${puzzle.hints}',
-                              borderColor: Colors.black,
-                              fontSize: 20,
+                          ),
+                          Positioned(
+                            top: -110,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 100),
+                              child: AppIcon(
+                                asset: IconProvider.confetti.buildImageUrl(),
+                                width: 134,
+                                height: 169,
+                              ),
                             ),
-                          const Gap(20),
-                          _buildConfirmButtonIfNeeded(puzzle),
+                          ),
+                          AppIcon(
+                            asset:
+                            'assets/images/${isLoose!=null ? 'lose' : 'win'} panel.png',
+                            width: double.infinity,
+                            height: 217,
+                            fit: BoxFit.fill,
+                          ),
+          Positioned(top: -42,child: GradientText('YOU', fontSize: 72)),
+                          Positioned(top: 20, child: GradientText('WIN', fontSize: 72)),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Row(
+                                children: [
+                                  TextWithBorder(text: '+ 10', borderColor: Color(0xFF340053), fontSize: 44),
+                                ],
+                              )
+                            ],
+                          )
                         ],
                       ),
-                    ),
-                  ),
-                  _buildPuzzleKeyboard(puzzle),
-                ],
-              ),
+                    ],
+                  )
+              ],
             );
           }
           return const SizedBox.shrink();
@@ -608,75 +677,19 @@ class _QuizScreenState extends State<QuizScreen> {
           CheckPuzzleSolution(widget.puzzleId, answer, (PuzzleStatus status) {
             switch (status) {
               case PuzzleStatus.completed:
-                _showPuzzleResultDialog(true, puzzle);
+                setState(() {
+                  isLoose = false;
+                });
               case PuzzleStatus.failed:
-                _showPuzzleResultDialog(false, puzzle);
+                setState(() {
+                  isLoose = true;
+                });
               default:
-                setState(() => isError = true);
+                setState(() {
+                  isLoose = null;
+                });
             }
           }),
         );
-  }
-
-  // ------------------ Диалоговый результат ------------------
-  void _showPuzzleResultDialog(bool isWinner, Puzzle puzzle) {
-    _timer.cancel();
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => AlertDialog(
-        backgroundColor: Colors.transparent,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        content: Container(
-          width: MediaQuery.of(context).size.width,
-          height: 217,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                isWinner ? 'YOU WIN' : 'YOU LOSE',
-                style: const TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              if (isWinner)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '+${puzzle.coinsReward} Coins ',
-                      style: const TextStyle(
-                        color: Colors.orange,
-                        fontSize: 20,
-                      ),
-                    ),
-                    Text(
-                      '+${puzzle.scoreReward} Score',
-                      style: const TextStyle(
-                        color: Colors.orange,
-                        fontSize: 20,
-                      ),
-                    ),
-                  ],
-                ),
-              const Gap(20),
-              ElevatedButton(
-                onPressed: () {
-                  context.pop();
-                  context.pop();
-                },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-                child: Text(isWinner ? 'Next' : 'Close'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

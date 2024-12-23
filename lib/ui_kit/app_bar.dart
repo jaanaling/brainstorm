@@ -40,7 +40,6 @@ class AppBackButton extends StatelessWidget {
         onTap: () {
           context.pop();
         },
-        splashColor: const Color(0xFFFF4AA7),
         child: Ink(
           width: 55,
           height: 55,

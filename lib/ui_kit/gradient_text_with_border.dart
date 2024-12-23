@@ -35,7 +35,6 @@ class GradientText extends StatelessWidget {
         text,
           textAlign: isCenter ? TextAlign.center : null,
           style: TextStyle(
-            color: Color(0xFFFFF700),
             fontSize: fontSize,
             fontFamily: 'Gulya',
           ),

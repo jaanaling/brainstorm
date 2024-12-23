@@ -136,12 +136,12 @@ class MainScreen extends StatelessWidget {
                 Center(
                   child: RoundedPieChart(
                     isHomeScreen: true,
-                    points: state.user.points,
-                    value: state.user.points.toDouble() /
-                        state.puzzles.fold(
-                          0,
-                          (sum, element) => sum + element.scoreReward,
-                        ),
+                    value: 0.5,
+                    // value: state.user.points.toDouble() /
+                    //     state.puzzles.fold(
+                    //       0,
+                    //       (sum, element) => sum + element.scoreReward,
+                    //     ),
                   ),
                 ),
                 //  CustomProgressIndicator(
@@ -274,7 +274,6 @@ void showBuyHintDialog(BuildContext context) {
                     ),
                     borderRadius: BorderRadius.circular(31),
                   ),
-                  
                 ),
               ),
               Center(
@@ -480,71 +479,42 @@ class FlagPainter extends CustomPainter {
 }
 
 class RoundedPieChart extends StatefulWidget {
-  final double value; // Прогресс в диапазоне 0..1
-  final bool isHomeScreen; // Условие для iPad-разметки (ваше логика)
-  final int points;
+  final double value;
+  final bool isHomeScreen;
 
-  const RoundedPieChart({
-    Key? key,
-    required this.value,
-    required this.points,
-    this.isHomeScreen = false,
-  }) : super(key: key);
+  const RoundedPieChart(
+      {Key? key, required this.value, this.isHomeScreen = false})
+      : super(key: key);
 
   @override
   _RoundedPieChartState createState() => _RoundedPieChartState();
 }
 
 class _RoundedPieChartState extends State<RoundedPieChart>
-    with TickerProviderStateMixin {
-  // Основная анимация "значения" (прогресса)
-  late AnimationController _progressController;
-  late Animation<double> _progressAnimation;
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _animation;
   late double _previousValue;
-
-  // Дополнительная анимация для «дышащей» белой обводки
-  late AnimationController _borderController;
-  late Animation<double> _borderWidthAnimation;
 
   @override
   void initState() {
     super.initState();
-
-    // 1) Контроллер для «значения прогресса»
-    _progressController = AnimationController(
+    _animationController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
     );
     _previousValue = widget.value;
-    _setupProgressAnimation();
-
-    // 2) Контроллер для «дышащей» белой обводки
-    _borderController = AnimationController(
-      duration: const Duration(seconds: 2),
-      vsync: this,
-    )..repeat(reverse: true);
-
-    _borderWidthAnimation = Tween<double>(begin: 8, end: 12).animate(
-      CurvedAnimation(
-        parent: _borderController,
-        curve: Curves.easeInOut,
-      ),
-    );
-
-    // Запускаем анимацию прогресса при первом показе
-    _progressController.forward();
+    _setupAnimation();
   }
 
-  void _setupProgressAnimation() {
-    _progressAnimation = Tween<double>(
+  void _setupAnimation() {
+    _animation = Tween<double>(
       begin: _previousValue,
       end: widget.value,
-    ).animate(
-      CurvedAnimation(
-        parent: _progressController,
-        curve: Curves.easeInOut,
-      ),
-    );
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeInOut,
+    ));
   }
 
   @override
@@ -552,56 +522,37 @@ class _RoundedPieChartState extends State<RoundedPieChart>
     super.didUpdateWidget(oldWidget);
     if (oldWidget.value != widget.value) {
       _previousValue = oldWidget.value;
-      _setupProgressAnimation();
-      _progressController
-        ..reset()
-        ..forward();
+      _setupAnimation();
+      _animationController.reset();
+      _animationController.forward();
     }
   }
 
   @override
   void dispose() {
-    _progressController.dispose();
-    _borderController.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // Вместо того, чтобы рисовать текст в `CustomPainter`,
-    // удобнее обернуть всё в Stack: CustomPaint + Text по центру
-    final size = isIpad(context) && widget.isHomeScreen
-        ? const Size(460, 460)
-        : const Size(230, 230);
-
     return AnimatedBuilder(
-      animation: _progressAnimation,
+      animation: _animation,
       builder: (context, child) {
-        return SizedBox(
-          width: size.width,
-          height: size.height,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              // 1) Наш кастомный прогресс-индикатор
-              AnimatedBuilder(
-                animation: _borderWidthAnimation,
-                builder: (context, _) {
-                  return CustomPaint(
-                    size: size,
-                    painter: PieChartPainter(
-                      progressValue: _progressAnimation.value,
-                      borderWidth: _borderWidthAnimation.value,
-                      context: context,
-                      isHomeScreen: widget.isHomeScreen,
-                    ),
-                  );
-                },
+        return Stack(
+          children: [
+            AppIcon(asset: IconProvider.diagram.buildImageUrl(), width: 313, height:  326),
+            Padding(
+              padding: const EdgeInsets.only(top: 21, left: 11),
+              child: CustomPaint(
+                size: isIpad(context) && widget.isHomeScreen
+                    ? Size(588, 588)
+                    : Size(294, 294),
+                painter: PieChartPainter(_animation.value, context,
+                    isHomeScreen: widget.isHomeScreen),
               ),
-              // 2) Текст в центре (числовое значение)
-              GradientText(widget.points.toString(), fontSize: 47),
-            ],
-          ),
+            ),
+          ],
         );
       },
     );
@@ -609,222 +560,63 @@ class _RoundedPieChartState extends State<RoundedPieChart>
 }
 
 class PieChartPainter extends CustomPainter {
-  final double progressValue; // 0..1 — какую часть круга закрашивать
-  final double borderWidth; // Анимированная толщина белой обводки
+  final double value;
   final BuildContext context;
   final bool isHomeScreen;
 
-  PieChartPainter({
-    required this.progressValue,
-    required this.borderWidth,
-    required this.context,
-    required this.isHomeScreen,
-  });
+  PieChartPainter(this.value, this.context, {this.isHomeScreen = false});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final radius = size.width / 2;
-    final center = Offset(radius, radius);
+    final double radius = (size.width / 2) - (isIpad(context) && isHomeScreen ? 132 : 66) / 2;
+    final Offset center = Offset(size.width / 2, size.height / 2);
 
-    // 1) Сначала РОЗОВЫЙ и ФИОЛЕТОВЫЙ
-    // -------------------------------
-    final pinkSweepAngle = progressValue * 2 * pi;
-    final pinkPaint = Paint()
-      ..color = Colors.pink
+    // Background Section (Always full circle)
+    final backgroundPaint = Paint()
+      ..shader = const LinearGradient(
+        colors: [Colors.transparent, Colors.transparent],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      ).createShader(
+        Rect.fromCircle(center: center, radius: radius),
+      )
       ..style = PaintingStyle.stroke
-      ..strokeWidth = isIpad(context) && isHomeScreen ? 100 : 50
-      ..strokeCap = StrokeCap.round;
-
-    final arcRect = Rect.fromCircle(center: center, radius: radius * 0.8);
-
-    // Рисуем розовый сектор
-    canvas.drawArc(
-      arcRect,
-      -pi / 2,
-      pinkSweepAngle,
-      false,
-      pinkPaint,
-    );
-
-    // Фиолетовый сектор
-    final purpleSweepAngle = 2 * pi - pinkSweepAngle;
-    final purplePaint = Paint()
-      ..color = Colors.deepPurpleAccent
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = isIpad(context) && isHomeScreen ? 100 : 50
-      ..strokeCap = StrokeCap.round;
-
-    final purpleStartAngle = -pi / 2 + pinkSweepAngle;
-    canvas.drawArc(
-      arcRect,
-      purpleStartAngle,
-      purpleSweepAngle,
-      false,
-      purplePaint,
-    );
-
-    // 2) Теперь БЕЛАЯ «дышащая» обводка поверх
-    // ----------------------------------------
-    final whitePaint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = borderWidth // Анимированная толщина
-      ..strokeCap = StrokeCap.round;
-
-    // Рисуем полный круг белой обводкой поверх дуг
-    canvas.drawCircle(
-      center,
-      radius - borderWidth / 2,
-      whitePaint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant PieChartPainter oldDelegate) {
-    return oldDelegate.progressValue != progressValue ||
-        oldDelegate.borderWidth != borderWidth;
-  }
-}
-
-class CustomProgressIndicator extends StatefulWidget {
-  final double value; // Значение, которое хотим отобразить (например, 1000).
-  final double size; // Размер всего круга.
-
-  const CustomProgressIndicator({
-    Key? key,
-    required this.value,
-    this.size = 200,
-  }) : super(key: key);
-
-  @override
-  State<CustomProgressIndicator> createState() =>
-      _CustomProgressIndicatorState();
-}
-
-class _CustomProgressIndicatorState extends State<CustomProgressIndicator>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _whiteBorderAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    // Контроллер для анимации белой обводки
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 2),
-    )..repeat(reverse: true); // Повторяем туда-сюда
-
-    // Анимация будет «дышать» в диапазоне от 8 до 12
-    _whiteBorderAnimation = Tween<double>(begin: 8, end: 12).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // Чтобы получать обновления анимации, используем AnimatedBuilder
-    return AnimatedBuilder(
-      animation: _whiteBorderAnimation,
-      builder: (context, child) {
-        return SizedBox(
-          width: widget.size,
-          height: widget.size,
-          child: CustomPaint(
-            painter: _ProgressPainter(
-              pinkArcSweep: 270, // Пример: розовая дуга ~ 270°
-              purpleArcSweep: 90, // Оставшиеся 90° – фиолетовая
-              whiteStrokeWidth: _whiteBorderAnimation.value,
-            ),
-            child: Center(
-              child: GradientText(widget.value.toString(), fontSize: 47),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-/// Кастомный Painter для отрисовки двух дуг и белой обводки
-class _ProgressPainter extends CustomPainter {
-  final double pinkArcSweep; // длина розовой дуги, в градусах
-  final double purpleArcSweep; // длина фиолетовой дуги, в градусах
-  final double whiteStrokeWidth;
-
-  _ProgressPainter({
-    required this.pinkArcSweep,
-    required this.purpleArcSweep,
-    required this.whiteStrokeWidth,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = min(size.width, size.height) / 2;
-
-    // ---------- 1) Рисуем белый круг (обводку), которую будем анимировать ----------
-    final whitePaint = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = whiteStrokeWidth
-      ..strokeCap = StrokeCap.round;
-
-    // Полный круг (360°) белой обводки
-    canvas.drawCircle(center, radius - whiteStrokeWidth / 2, whitePaint);
-
-    // ---------- 2) Рисуем розовую дугу ----------
-    final pinkPaint = Paint()
-      ..color = Colors.pink
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = radius * 0.6 // толщина розового «сектора»
-      ..strokeCap = StrokeCap.round;
-
-    // Преобразуем градусы в радианы: угол = градусов * (pi / 180)
-    final pinkStartAngle = -pi / 2; // начинаем с верхней точки (-90°)
-    final pinkSweepRads = pinkArcSweep * pi / 180;
-
-    // Прямоугольник, описывающий нашу дугу
-    final arcRect = Rect.fromCircle(center: center, radius: radius * 0.7);
+      ..strokeWidth = isIpad(context) && isHomeScreen ? 132 : 66;
 
     canvas.drawArc(
-      arcRect,
-      pinkStartAngle,
-      pinkSweepRads,
+      Rect.fromCircle(center: center, radius: radius),
+      0,
+      2 * pi,
       false,
-      pinkPaint,
+      backgroundPaint,
     );
 
-    // ---------- 3) Рисуем фиолетовую дугу ----------
-    final purplePaint = Paint()
-      ..color = Colors.deepPurpleAccent
+    // Foreground Section (Yellow Arc)
+    final sweepAngle = value * 2 * pi;
+    final foregroundPaint = Paint()
+      ..shader = const LinearGradient(
+        colors: [
+          Color(0xFFFF00A1),
+          Color(0xFFFF5CCE),
+        ],
+      ).createShader(
+        Rect.fromCircle(center: center, radius: radius),
+      )
       ..style = PaintingStyle.stroke
-      ..strokeWidth = radius * 0.6
+      ..strokeWidth = isIpad(context) && isHomeScreen ? 133 : 67
       ..strokeCap = StrokeCap.round;
 
-    final purpleStartAngle = pinkStartAngle + pinkSweepRads;
-    final purpleSweepRads = purpleArcSweep * pi / 180;
-
     canvas.drawArc(
-      arcRect,
-      purpleStartAngle,
-      purpleSweepRads,
+      Rect.fromCircle(center: center, radius: radius),
+      -pi / 2, // Start at top center
+      sweepAngle,
       false,
-      purplePaint,
+      foregroundPaint,
     );
   }
 
   @override
-  bool shouldRepaint(_ProgressPainter oldDelegate) {
-    // Перерисовываем, если изменились параметры
-    return oldDelegate.pinkArcSweep != pinkArcSweep ||
-        oldDelegate.purpleArcSweep != purpleArcSweep ||
-        oldDelegate.whiteStrokeWidth != whiteStrokeWidth;
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true; // Перерисовка при изменении данных
   }
 }

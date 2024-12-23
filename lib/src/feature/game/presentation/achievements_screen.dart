@@ -44,19 +44,6 @@ class AchievementsScreen extends StatelessWidget {
     );
   }
 
-  // Кнопка "назад" сверху
-  Widget _buildBackButton(BuildContext context) {
-    return Align(
-      alignment: Alignment.topLeft,
-      child: IconButton(
-        icon: Icon(Icons.arrow_back, color: Colors.white),
-        onPressed: () {
-          context.pop();
-        },
-      ),
-    );
-  }
-
   // Список достижений
   Widget _buildAchievementsList(
       User user, List<Achievement> achievements, BuildContext context) {

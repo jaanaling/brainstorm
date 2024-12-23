@@ -18,6 +18,7 @@ enum IconProvider {
   timer(imageName: 'timer.png'),
   yellowB(imageName: 'yellowb.png'),
   plus(imageName: 'plus.png'),
+  diagram(imageName: 'diagram.png'),
 
   unknown(imageName: '');
 
