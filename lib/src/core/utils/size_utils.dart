@@ -34,3 +34,7 @@ double getHeight(
 
   return width;
 }
+
+bool isIpad (BuildContext context){
+  return MediaQuery.of(context).size.shortestSide >= 600;
+}

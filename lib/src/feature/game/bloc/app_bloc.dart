@@ -193,9 +193,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     final currentState = state;
     if (currentState is! AppLoaded) return;
 
-    if (currentState.user.coins >= 10) {
+    if (currentState.user.coins >= 20) {
       final updatedUser = currentState.user.copyWith(
-        coins: currentState.user.coins - 10,
+        coins: currentState.user.coins - 20,
         hints: currentState.user.hints + 1,
       );
 
