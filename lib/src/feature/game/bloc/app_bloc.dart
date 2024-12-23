@@ -79,34 +79,36 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       }
 
       bool isCorrect = false;
-      switch (puzzle.type) {
-        case PuzzleType.sumOfNumbers:
-          isCorrect = checkSumOfNumbers(
-            event.userSolution as List<int>,
-            puzzle.solution as List<dynamic>,
-          );
-        case PuzzleType.logicalSequence:
-          isCorrect = checkLogicalSequenceNext(
-            event.userSolution as int,
-            puzzle.solution as int,
-          );
+      if (event.userSolution != null) {
+        switch (puzzle.type) {
+          case PuzzleType.sumOfNumbers:
+            isCorrect = checkSumOfNumbers(
+              event.userSolution as List<int>,
+              puzzle.solution as List<dynamic>,
+            );
+          case PuzzleType.logicalSequence:
+            isCorrect = checkLogicalSequenceNext(
+              event.userSolution as int,
+              puzzle.solution as int,
+            );
 
-        case PuzzleType.mathEquation:
-          isCorrect = checkMathEquation(
-            event.userSolution as int,
-            puzzle.solution as int,
-          );
-        case PuzzleType.symbolicAnagram:
-          isCorrect = checkAnagramSolution(
-            event.userSolution as String,
-            puzzle.solution as String,
-          );
+          case PuzzleType.mathEquation:
+            isCorrect = checkMathEquation(
+              event.userSolution as int,
+              puzzle.solution as int,
+            );
+          case PuzzleType.symbolicAnagram:
+            isCorrect = checkAnagramSolution(
+              event.userSolution as String,
+              puzzle.solution as String,
+            );
 
-        case PuzzleType.cipherCode:
-          isCorrect = checkCipherSolution(
-            event.userSolution as String,
-            puzzle.solution as String,
-          );
+          case PuzzleType.cipherCode:
+            isCorrect = checkCipherSolution(
+              event.userSolution as String,
+              puzzle.solution as String,
+            );
+        }
       }
 
       Puzzle updatedPuzzle;

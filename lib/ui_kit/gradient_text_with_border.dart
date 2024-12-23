@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class GradientText extends StatelessWidget {
+  final bool isCenter;
   const GradientText(
     this.text, {
     required this.fontSize,
+    this.isCenter = false,
+    super.key,
   });
 
   final String text;
@@ -31,6 +34,7 @@ class GradientText extends StatelessWidget {
       children: [
         Text(
           text,
+          textAlign: isCenter ? TextAlign.center : null,
           style: TextStyle(
             fontSize: fontSize,
             fontWeight: FontWeight.w400,
@@ -48,6 +52,7 @@ class GradientText extends StatelessWidget {
           ),
           child: Text(
             text,
+            textAlign: isCenter ? TextAlign.center : null,
             style: TextStyle(
               color: Color(0xFFFFF700),
               fontSize: fontSize,

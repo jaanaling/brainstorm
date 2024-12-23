@@ -143,7 +143,15 @@ class MainScreen extends StatelessWidget {
               //  ),
 
               const Gap(15),
-              const AppButton(),
+              AppButton(
+                onPressed: () => context
+                    .push("${RouteValue.home.path}/${RouteValue.select.path}"),
+              ),
+              AppButton(
+                onPressed: () => context.push(
+                    "${RouteValue.home.path}/${RouteValue.dayli.path}",
+                    extra: "d${DateTime.now().weekday}"),
+              ),
             ],
           );
         }
@@ -385,7 +393,12 @@ void showBuyHintDialog(BuildContext context) {
                   ),
                 ),
               ),
-              //  Positioned(bottom: 0, child: AppButton())
+              Positioned(
+                  bottom: 0,
+                  child: AppButton(onPressed: () {
+                    Navigator.of(context).pop();
+                    context.read<AppBloc>().add(BuyHint());
+                  }))
             ],
           ),
         ),
@@ -583,63 +596,62 @@ class PieChartPainter extends CustomPainter {
   });
 
   @override
-void paint(Canvas canvas, Size size) {
-  final radius = size.width / 2;
-  final center = Offset(radius, radius);
+  void paint(Canvas canvas, Size size) {
+    final radius = size.width / 2;
+    final center = Offset(radius, radius);
 
-  // 1) Сначала РОЗОВЫЙ и ФИОЛЕТОВЫЙ
-  // -------------------------------
-  final pinkSweepAngle = progressValue * 2 * pi;
-  final pinkPaint = Paint()
-    ..color = Colors.pink
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = isIpad(context) && isHomeScreen ? 100 : 50
-    ..strokeCap = StrokeCap.round;
+    // 1) Сначала РОЗОВЫЙ и ФИОЛЕТОВЫЙ
+    // -------------------------------
+    final pinkSweepAngle = progressValue * 2 * pi;
+    final pinkPaint = Paint()
+      ..color = Colors.pink
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = isIpad(context) && isHomeScreen ? 100 : 50
+      ..strokeCap = StrokeCap.round;
 
-  final arcRect = Rect.fromCircle(center: center, radius: radius * 0.8);
-  
-  // Рисуем розовый сектор
-  canvas.drawArc(
-    arcRect,
-    -pi / 2,
-    pinkSweepAngle,
-    false,
-    pinkPaint,
-  );
+    final arcRect = Rect.fromCircle(center: center, radius: radius * 0.8);
 
-  // Фиолетовый сектор
-  final purpleSweepAngle = 2 * pi - pinkSweepAngle;
-  final purplePaint = Paint()
-    ..color = Colors.deepPurpleAccent
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = isIpad(context) && isHomeScreen ? 100 : 50
-    ..strokeCap = StrokeCap.round;
+    // Рисуем розовый сектор
+    canvas.drawArc(
+      arcRect,
+      -pi / 2,
+      pinkSweepAngle,
+      false,
+      pinkPaint,
+    );
 
-  final purpleStartAngle = -pi / 2 + pinkSweepAngle;
-  canvas.drawArc(
-    arcRect,
-    purpleStartAngle,
-    purpleSweepAngle,
-    false,
-    purplePaint,
-  );
+    // Фиолетовый сектор
+    final purpleSweepAngle = 2 * pi - pinkSweepAngle;
+    final purplePaint = Paint()
+      ..color = Colors.deepPurpleAccent
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = isIpad(context) && isHomeScreen ? 100 : 50
+      ..strokeCap = StrokeCap.round;
 
-  // 2) Теперь БЕЛАЯ «дышащая» обводка поверх
-  // ----------------------------------------
-  final whitePaint = Paint()
-    ..color = Colors.white
-    ..style = PaintingStyle.stroke
-    ..strokeWidth = borderWidth // Анимированная толщина
-    ..strokeCap = StrokeCap.round;
+    final purpleStartAngle = -pi / 2 + pinkSweepAngle;
+    canvas.drawArc(
+      arcRect,
+      purpleStartAngle,
+      purpleSweepAngle,
+      false,
+      purplePaint,
+    );
 
-  // Рисуем полный круг белой обводкой поверх дуг
-  canvas.drawCircle(
-    center,
-    radius - borderWidth / 2, 
-    whitePaint,
-  );
-}
+    // 2) Теперь БЕЛАЯ «дышащая» обводка поверх
+    // ----------------------------------------
+    final whitePaint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = borderWidth // Анимированная толщина
+      ..strokeCap = StrokeCap.round;
 
+    // Рисуем полный круг белой обводкой поверх дуг
+    canvas.drawCircle(
+      center,
+      radius - borderWidth / 2,
+      whitePaint,
+    );
+  }
 
   @override
   bool shouldRepaint(covariant PieChartPainter oldDelegate) {

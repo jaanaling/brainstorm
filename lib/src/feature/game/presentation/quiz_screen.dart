@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'package:brainstorm_quest/src/core/utils/icon_provider.dart';
 import 'package:brainstorm_quest/src/feature/game/bloc/app_bloc.dart';
 import 'package:brainstorm_quest/src/feature/game/model/puzzle.dart';
 import 'package:brainstorm_quest/src/feature/game/model/user.dart';
+import 'package:brainstorm_quest/ui_kit/gradient_text_with_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -97,40 +100,64 @@ class _QuizScreenState extends State<QuizScreen> {
             availableNumbers.sort();
           }
 
-          return Scaffold(
-            backgroundColor: Colors.black87,
-            body: SafeArea(
-              child: Column(
-                children: [
-                  _buildHeader(puzzle, state.user),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          _buildInstructions(puzzle),
-                          const SizedBox(height: 20),
-                          _buildPuzzleWidget(puzzle),
-                          const SizedBox(height: 20),
-                          if (isError)
-                            Text(
-                              "You have error. Attempts: ${puzzle.attempts}",
-                              style: TextStyle(color: Colors.red),
+          return SafeArea(
+            child: Column(
+              children: [
+                _buildHeader(puzzle, state.user),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        _buildInstructions(puzzle),
+                        const SizedBox(height: 20),
+                        Container(
+                          width: 330,
+                          height: 171,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF230162),
+                            borderRadius: BorderRadius.circular(18),
+                            border: const Border(
+                              left: BorderSide(
+                                strokeAlign: BorderSide.strokeAlignOutside,
+                                color: Color(0xFF6123CE),
+                              ),
+                              top: BorderSide(
+                                strokeAlign: BorderSide.strokeAlignOutside,
+                                color: Color(0xFF6123CE),
+                              ),
+                              right: BorderSide(
+                                strokeAlign: BorderSide.strokeAlignOutside,
+                                color: Color(0xFF6123CE),
+                              ),
+                              bottom: BorderSide(
+                                width: 2,
+                                strokeAlign: BorderSide.strokeAlignOutside,
+                                color: Color(0xFF6123CE),
+                              ),
                             ),
-                          const SizedBox(height: 20),
-                          if (isHintUsed)
-                            Text(
-                              "Hint: ${puzzle.hints}",
-                              style: TextStyle(color: Colors.red),
-                            ),
-                          const SizedBox(height: 20),
-                          _buildConfirmButtonIfNeeded(puzzle),
-                        ],
-                      ),
+                          ),
+                          child: _buildPuzzleWidget(puzzle),
+                        ),
+                        const SizedBox(height: 20),
+                        if (isError)
+                          Text(
+                            "You have error. Attempts: ${puzzle.attempts}",
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        const SizedBox(height: 20),
+                        if (isHintUsed)
+                          Text(
+                            "Hint: ${puzzle.hints}",
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        const SizedBox(height: 20),
+                        _buildConfirmButtonIfNeeded(puzzle),
+                      ],
                     ),
                   ),
-                  _buildInputMethod(puzzle),
-                ],
-              ),
+                ),
+                _buildInputMethod(puzzle),
+              ],
             ),
           );
         }
@@ -143,45 +170,88 @@ class _QuizScreenState extends State<QuizScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        const Icon(Icons.timer, color: Colors.white),
-        Text(
-          "${_secondsLeft.toString().padLeft(2, '0')}",
-          style: const TextStyle(color: Colors.white, fontSize: 20),
-        ),
-        Row(
+        Column(
           children: [
-            const Icon(Icons.favorite, color: Colors.red),
-            Text(
-              puzzle.attempts.toString(),
-              style: const TextStyle(color: Colors.white),
+            Image.asset(
+              IconProvider.timer.buildImageUrl(),
+              width: 56,
+              height: 66,
             ),
-            IconButton(
-                onPressed: () {
-                  setState(() {
-                    if (!isHintUsed && user.hints > 0) {
-                      isHintUsed = true;
-                      context.read<AppBloc>().add(UseHint(widget.puzzleId));
-                    }
-                  });
-                },
-                icon: Icon(Icons.yard_rounded))
+            Gap(7),
+            TextWithBorder(
+              text: "${_secondsLeft.toString().padLeft(2, '0')}",
+              fontSize: 23,
+              borderColor: Colors.black,
+            ),
           ],
         ),
+        Column(
+          children: [
+            Image.asset(
+              IconProvider.hp.buildImageUrl(),
+              width: 56,
+              height: 66,
+            ),
+            Gap(7),
+            TextWithBorder(
+              text: puzzle.attempts.toString(),
+              fontSize: 23,
+              borderColor: Colors.black,
+            ),
+          ],
+        ),
+        Column(
+          children: [
+            Image.asset(
+              IconProvider.hint.buildImageUrl(),
+              width: 56,
+              height: 66,
+            ),
+            Gap(7),
+            TextWithBorder(
+              text: puzzle.attempts.toString(),
+              fontSize: 23,
+              borderColor: Colors.black,
+            ),
+          ],
+        ),
+        Column(
+          children: [
+            Image.asset(
+              IconProvider.hint.buildImageUrl(),
+              width: 56,
+              height: 66,
+            ),
+            Gap(7),
+            TextWithBorder(
+              text: puzzle.attempts.toString(),
+              fontSize: 23,
+              borderColor: Colors.black,
+            ),
+          ],
+        ),
+        IconButton(
+            onPressed: () {
+              setState(() {
+                if (!isHintUsed && user.hints > 0) {
+                  isHintUsed = true;
+                  context.read<AppBloc>().add(UseHint(widget.puzzleId));
+                }
+              });
+            },
+            icon: const Icon(Icons.yard_rounded)),
       ],
     );
   }
 
   Widget _buildInstructions(Puzzle puzzle) {
-    return Container(
-      color: Colors.deepPurple,
-      margin: const EdgeInsets.all(10),
-      padding: const EdgeInsets.all(10),
-      width: double.infinity,
-      child: Center(
-        child: Text(
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: GradientText(
           puzzle.instructions,
-          style: const TextStyle(color: Colors.white, fontSize: 18),
-          textAlign: TextAlign.center,
+          isCenter: true,
+          fontSize: 32,
         ),
       ),
     );
@@ -193,9 +263,10 @@ class _QuizScreenState extends State<QuizScreen> {
         final target = puzzle.data['target'] as int;
         return Column(
           children: [
-            Text(
-              'Target: $target',
-              style: const TextStyle(color: Colors.white),
+            TextWithBorder(
+              text: 'Target: $target',
+              fontSize: 20,
+              borderColor: Colors.black,
             ),
             const SizedBox(height: 10),
             // Отображаем ячейки для выбранных чисел
@@ -227,9 +298,10 @@ class _QuizScreenState extends State<QuizScreen> {
         final options = List<int>.from(puzzle.data['options'] as List);
         return Column(
           children: [
-            Text(
-              "Sequence: ${sequence.join(", ")} , ?",
-              style: const TextStyle(color: Colors.white),
+            TextWithBorder(
+              text: "Sequence: ${sequence.join(", ")} , ?",
+              fontSize: 20,
+              borderColor: Colors.black,
             ),
             const SizedBox(height: 10),
             Wrap(
@@ -253,7 +325,11 @@ class _QuizScreenState extends State<QuizScreen> {
         final choices = List<int>.from(puzzle.data['choices'] as List);
         return Column(
           children: [
-            Text(equation, style: const TextStyle(color: Colors.white)),
+            TextWithBorder(
+              text: equation,
+              fontSize: 20,
+              borderColor: Colors.black,
+            ),
             const SizedBox(height: 10),
             Wrap(
               spacing: 10,
@@ -275,10 +351,12 @@ class _QuizScreenState extends State<QuizScreen> {
         final letters = List<String>.from(puzzle.data['letters'] as List);
         return Column(
           children: [
-            Text(
-              "Letters: ${letters.join(", ")}",
-              style: const TextStyle(color: Colors.white),
+            TextWithBorder(
+              text: "Letters: ${letters.join(", ")}",
+              fontSize: 20,
+              borderColor: Colors.black,
             ),
+
             const SizedBox(height: 10),
             // Можно добавить ячейки, но пока оставим textfield
             Container(
@@ -298,9 +376,10 @@ class _QuizScreenState extends State<QuizScreen> {
         final shift = puzzle.data['shift'] as int;
         return Column(
           children: [
-            Text(
-              'Cipher: $cipher (shift: $shift)',
-              style: const TextStyle(color: Colors.white),
+            TextWithBorder(
+              text: 'Cipher: $cipher (shift: $shift)',
+              fontSize: 20,
+              borderColor: Colors.black,
             ),
             const SizedBox(height: 10),
             Container(
