@@ -145,25 +145,43 @@ class _QuizScreenState extends State<QuizScreen> {
                     ],
                   ),
                 ),
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Container(
-                        color: Colors.black.withOpacity(0.7799999833106995),
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.height,
-                      ),
-                      Stack(
-                        clipBehavior: Clip.none,
-                        alignment: Alignment.topCenter,
-                        children: [
-                          Positioned(
-                            top: -110,
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 100),
-                              child: Transform(
-                                transform: Matrix4.rotationY(pi),  // Отражаем по оси Y
-                                alignment: Alignment.center,
+                if(isLoose!=null)
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      color: Colors.black.withOpacity(0.7799999833106995),
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.height,
+                    ),
+                    Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if(isLoose==false)
+                        Stack(
+                          clipBehavior: Clip.none,
+                          alignment: Alignment.topCenter,
+                          children: [
+                            Positioned(
+                              top: -110,
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 100),
+                                child: Transform(
+                                  transform:
+                                      Matrix4.rotationY(pi), // Отражаем по оси Y
+                                  alignment: Alignment.center,
+                                  child: AppIcon(
+                                    asset: IconProvider.confetti.buildImageUrl(),
+                                    width: 134,
+                                    height: 169,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              top: -110,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 100),
                                 child: AppIcon(
                                   asset: IconProvider.confetti.buildImageUrl(),
                                   width: 134,
@@ -171,41 +189,113 @@ class _QuizScreenState extends State<QuizScreen> {
                                 ),
                               ),
                             ),
-                          ),
-                          Positioned(
-                            top: -110,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 100),
-                              child: AppIcon(
-                                asset: IconProvider.confetti.buildImageUrl(),
-                                width: 134,
-                                height: 169,
-                              ),
+                            AppIcon(
+                              asset:
+                                  'assets/images/win panel.png',
+                              width: double.infinity,
+                              height: 227,
+                              fit: BoxFit.fill,
                             ),
-                          ),
-                          AppIcon(
-                            asset:
-                            'assets/images/${isLoose!=null ? 'lose' : 'win'} panel.png',
-                            width: double.infinity,
-                            height: 217,
-                            fit: BoxFit.fill,
-                          ),
-          Positioned(top: -42,child: GradientText('YOU', fontSize: 72)),
-                          Positioned(top: 20, child: GradientText('WIN', fontSize: 72)),
-                          Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Row(
+                            Positioned(
+                                top: -42, child: GradientText('YOU', fontSize: 72)),
+                            Positioned(
+                                top: 20, child: GradientText('WIN', fontSize: 72)),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 95),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  TextWithBorder(text: '+ 10', borderColor: Color(0xFF340053), fontSize: 44),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextWithBorder(
+                                          text: '+ 10',
+                                          borderColor: Color(0xFF340053),
+                                          fontSize: 44),
+                                      Gap(5),
+                                      AppIcon(
+                                        asset: IconProvider.coins.buildImageUrl(),
+                                        width: 52,
+                                        height: 61,
+                                      )
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      TextWithBorder(
+                                          text: '+ 10',
+                                          borderColor: Color(0xFF340053),
+                                          fontSize: 44),
+                                      Gap(5),
+                                      Container(
+                                        width: 55,
+                                        height: 55,
+                                        decoration: const ShapeDecoration(
+                                          gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              Color(0xFF5A008F),
+                                              Color(0xFFB100CD),
+                                              Color(0xFFFF4AA7),
+                                            ],
+                                          ),
+                                          shape: OvalBorder(
+                                            side: BorderSide(color: Color(0xFF3D0060)),
+                                          ),
+                                          shadows: [
+                                            BoxShadow(
+                                              color: Color(0x3F000000),
+                                              blurRadius: 3.40,
+                                              offset: Offset(0, 3),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Center(
+                                          child: AppIcon(
+                                            asset: 'assets/images/star.png',
+                                            width: 46,
+                                            height: 50,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
                                 ],
-                              )
+                              ),
+                            )
+                          ],
+                        ),
+                        if(isLoose == true)
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              AppIcon(
+                                asset:
+                                'assets/images/lose panel.png',
+                                width: double.infinity,
+                                height: 217,
+                                fit: BoxFit.fill,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 45),
+                                child: GradientText('YOU', fontSize: 72),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 72),
+                                child: GradientText('LOSE', fontSize: 72),
+                              ),
                             ],
-                          )
-                        ],
-                      ),
-                    ],
-                  )
+                          ),
+                        Gap(86),
+                        AppButton(onPressed: (){
+                          context.pop();
+                        }, text: 'next', color: isLoose!?ButtonColors.yellow: ButtonColors.purple)
+                      ],
+                    ),
+                  ],
+                )
               ],
             );
           }
