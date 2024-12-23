@@ -1,17 +1,20 @@
 import 'dart:async';
-import 'package:brainstorm_quest/src/core/utils/icon_provider.dart';
-import 'package:brainstorm_quest/src/feature/game/bloc/app_bloc.dart';
-import 'package:brainstorm_quest/src/feature/game/model/puzzle.dart';
-import 'package:brainstorm_quest/src/feature/game/model/user.dart';
-import 'package:brainstorm_quest/ui_kit/gradient_text_with_border.dart';
+import 'dart:math';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:brainstorm_quest/src/core/utils/icon_provider.dart';
+import 'package:brainstorm_quest/src/feature/game/bloc/app_bloc.dart';
+import 'package:brainstorm_quest/src/feature/game/model/puzzle.dart';
+import 'package:brainstorm_quest/src/feature/game/model/user.dart';
+import 'package:brainstorm_quest/ui_kit/app_bar.dart';
+import 'package:brainstorm_quest/ui_kit/gradient_text_with_border.dart';
+
 class QuizScreen extends StatefulWidget {
   final String puzzleId;
-
   const QuizScreen({super.key, required this.puzzleId});
 
   @override
@@ -22,17 +25,20 @@ class _QuizScreenState extends State<QuizScreen> {
   late Timer _timer;
   int _secondsLeft = 90;
 
-  // Для sumOfNumbers
-  List<int?> sumAnswer = []; // хранит выбранные числа. null - не заполнено
+  // Состояния для разных типов головоломок
+  // --------------------------------------
+  // Сумма чисел
+  List<int?> sumAnswer = [];
   List<int> availableNumbers = [];
 
-  // Для logicalSequence / mathEquation
+  // Логическая последовательность / мат. выражение
   int? selectedChoice;
   bool isError = false;
-  bool isHintUsed = false;
 
-  // Для symbolicAnagram / cipherCode
-  TextEditingController textController = TextEditingController();
+  // Анаграмма / Шифр
+  final textController = TextEditingController();
+
+  bool isHintUsed = false;
 
   @override
   void initState() {
@@ -41,14 +47,12 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
       if (_secondsLeft > 0) {
-        setState(() {
-          _secondsLeft--;
-        });
+        setState(() => _secondsLeft--);
       } else {
         _timer.cancel();
-        _showLoseDialog();
+        _showLoseDialog(); // Если время вышло
       }
     });
   }
@@ -60,446 +64,336 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void _showLoseDialog() {
-    final puzzle = context.read<AppBloc>().state is AppLoaded
-        ? (context.read<AppBloc>().state as AppLoaded)
-            .puzzles
-            .firstWhere((p) => p.id == widget.puzzleId)
-        : null;
+    final appState = context.read<AppBloc>().state;
+    if (appState is! AppLoaded) return;
 
-    if (puzzle != null) {
-      for (int i = 0; i < puzzle.attempts; i++) {
-        context.read<AppBloc>().add(
-            CheckPuzzleSolution(puzzle.id, null, (PuzzleStatus status) {}));
-      }
+    final puzzle = appState.puzzles.firstWhere((p) => p.id == widget.puzzleId);
+    // Автоматически потратили все попытки
+    for (int i = 0; i < puzzle.attempts; i++) {
+      context.read<AppBloc>().add(CheckPuzzleSolution(puzzle.id, null, (_) {}));
+    }
+    _showPuzzleResultDialog(false, puzzle);
+  }
 
-      showWinDialog(context, false, puzzle);
+  void _useHint(User user) {
+    if (!isHintUsed && user.hints > 0) {
+      setState(() => isHintUsed = true);
+      context.read<AppBloc>().add(UseHint(widget.puzzleId));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppBloc, AppState>(
-      builder: (context, state) {
-        if (state is AppLoading) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
-        }
-        if (state is AppError) {
-          return Scaffold(body: Center(child: Text(state.message)));
-        }
-        if (state is AppLoaded) {
-          final puzzle =
-              state.puzzles.firstWhere((p) => p.id == widget.puzzleId);
-
-          // Инициализируем состояние для sumOfNumbers, если это данный тип
-          if (puzzle.type == PuzzleType.sumOfNumbers && sumAnswer.isEmpty) {
-            final solutionList = puzzle.solution as List;
-            sumAnswer = List.filled(solutionList.length, null);
-            availableNumbers = List<int>.from(puzzle.data['numbers'] as List);
-            availableNumbers.sort();
+    return Material(
+      color: Colors.transparent,
+      child: BlocBuilder<AppBloc, AppState>(
+        builder: (_, state) {
+          if (state is AppLoading) {
+            return const Scaffold(
+                body: Center(child: CircularProgressIndicator()));
           }
+          if (state is AppError) {
+            return Scaffold(body: Center(child: Text(state.message)));
+          }
+          if (state is AppLoaded) {
+            final puzzle =
+                state.puzzles.firstWhere((p) => p.id == widget.puzzleId);
+            _initSumOfNumbersIfNeeded(puzzle);
 
-          return SafeArea(
-            child: Column(
-              children: [
-                _buildHeader(puzzle, state.user),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        _buildInstructions(puzzle),
-                        const SizedBox(height: 20),
-                        Container(
-                          width: 330,
-                          height: 171,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF230162),
-                            borderRadius: BorderRadius.circular(18),
-                            border: const Border(
-                              left: BorderSide(
-                                strokeAlign: BorderSide.strokeAlignOutside,
-                                color: Color(0xFF6123CE),
-                              ),
-                              top: BorderSide(
-                                strokeAlign: BorderSide.strokeAlignOutside,
-                                color: Color(0xFF6123CE),
-                              ),
-                              right: BorderSide(
-                                strokeAlign: BorderSide.strokeAlignOutside,
-                                color: Color(0xFF6123CE),
-                              ),
-                              bottom: BorderSide(
-                                width: 2,
-                                strokeAlign: BorderSide.strokeAlignOutside,
-                                color: Color(0xFF6123CE),
-                              ),
+            return SafeArea(
+              child: Column(
+                children: [
+                  _buildHeader(puzzle, state.user),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          const Gap(20),
+                          _buildInstructions(puzzle),
+                          const Gap(40),
+                          _buildPuzzleContainer(puzzle),
+                          const Gap(20),
+                          if (isError)
+                            const TextWithBorder(
+                              text: 'Incorrect, try again!',
+                              borderColor: Colors.red,
+                              fontSize: 20,
                             ),
-                          ),
-                          child: _buildPuzzleWidget(puzzle),
-                        ),
-                        const SizedBox(height: 20),
-                        if (isError)
-                          Text(
-                            "You have error. Attempts: ${puzzle.attempts}",
-                            style: const TextStyle(color: Colors.red),
-                          ),
-                        const SizedBox(height: 20),
-                        if (isHintUsed)
-                          Text(
-                            "Hint: ${puzzle.hints}",
-                            style: const TextStyle(color: Colors.red),
-                          ),
-                        const SizedBox(height: 20),
-                        _buildConfirmButtonIfNeeded(puzzle),
-                      ],
+                          const Gap(20),
+                          if (isHintUsed)
+                            TextWithBorder(
+                              text: 'Hint: ${puzzle.hints}',
+                              borderColor: Colors.black,
+                              fontSize: 20,
+                            ),
+                          const Gap(20),
+                          _buildConfirmButtonIfNeeded(puzzle),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                _buildInputMethod(puzzle),
-              ],
-            ),
-          );
-        }
-        return const SizedBox.shrink();
-      },
+                  _buildPuzzleKeyboard(puzzle),
+                ],
+              ),
+            );
+          }
+          return const SizedBox.shrink();
+        },
+      ),
     );
   }
 
+  // ------------------ Вспомогательная инициализация ------------------
+  void _initSumOfNumbersIfNeeded(Puzzle puzzle) {
+    if (puzzle.type == PuzzleType.sumOfNumbers && sumAnswer.isEmpty) {
+      final solutionList = puzzle.solution as List;
+      sumAnswer = List.filled(solutionList.length, null);
+      availableNumbers = List<int>.from(puzzle.data['numbers'] as List)..sort();
+    }
+  }
+
+  // ------------------ UI-методы (шапка, инструкции, контейнеры) ------------------
   Widget _buildHeader(Puzzle puzzle, User user) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          const AppBackButton(),
+          const Spacer(),
+          _buildStatusColumn(IconProvider.timer.buildImageUrl(),
+              _secondsLeft.toString().padLeft(2, '0')),
+          const Gap(30),
+          _buildStatusColumn(
+              IconProvider.hp.buildImageUrl(), puzzle.attempts.toString()),
+          const Gap(20),
+          _buildStatusColumn(
+              IconProvider.hint.buildImageUrl(), user.hints.toString()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatusColumn(String iconPath, String value) {
+    return Column(
       children: [
-        Column(
-          children: [
-            Image.asset(
-              IconProvider.timer.buildImageUrl(),
-              width: 56,
-              height: 66,
-            ),
-            Gap(7),
-            TextWithBorder(
-              text: "${_secondsLeft.toString().padLeft(2, '0')}",
-              fontSize: 23,
-              borderColor: Colors.black,
-            ),
-          ],
-        ),
-        Column(
-          children: [
-            Image.asset(
-              IconProvider.hp.buildImageUrl(),
-              width: 56,
-              height: 66,
-            ),
-            Gap(7),
-            TextWithBorder(
-              text: puzzle.attempts.toString(),
-              fontSize: 23,
-              borderColor: Colors.black,
-            ),
-          ],
-        ),
-        Column(
-          children: [
-            Image.asset(
-              IconProvider.hint.buildImageUrl(),
-              width: 56,
-              height: 66,
-            ),
-            Gap(7),
-            TextWithBorder(
-              text: puzzle.attempts.toString(),
-              fontSize: 23,
-              borderColor: Colors.black,
-            ),
-          ],
-        ),
-        Column(
-          children: [
-            Image.asset(
-              IconProvider.hint.buildImageUrl(),
-              width: 56,
-              height: 66,
-            ),
-            Gap(7),
-            TextWithBorder(
-              text: puzzle.attempts.toString(),
-              fontSize: 23,
-              borderColor: Colors.black,
-            ),
-          ],
-        ),
-        IconButton(
-            onPressed: () {
-              setState(() {
-                if (!isHintUsed && user.hints > 0) {
-                  isHintUsed = true;
-                  context.read<AppBloc>().add(UseHint(widget.puzzleId));
-                }
-              });
-            },
-            icon: const Icon(Icons.yard_rounded)),
+        Image.asset(iconPath, width: 56, height: 66),
+        const Gap(7),
+        TextWithBorder(text: value, fontSize: 23, borderColor: Colors.black),
       ],
     );
   }
 
   Widget _buildInstructions(Puzzle puzzle) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: GradientText(
-          puzzle.instructions,
-          isCenter: true,
-          fontSize: 32,
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: GradientText(
+        puzzle.instructions,
+        isCenter: true,
+        fontSize: 32,
       ),
     );
   }
 
+  Widget _buildPuzzleContainer(Puzzle puzzle) {
+    return Container(
+      width: 330,
+      height: 171,
+      decoration: BoxDecoration(
+        color: const Color(0xFF230162),
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0xFF6123CE), width: 2),
+      ),
+      child: _buildPuzzleWidget(puzzle),
+    );
+  }
+
+  // ------------------ Основной виджет для текущего puzzle ------------------
   Widget _buildPuzzleWidget(Puzzle puzzle) {
     switch (puzzle.type) {
       case PuzzleType.sumOfNumbers:
-        final target = puzzle.data['target'] as int;
-        return Column(
-          children: [
-            TextWithBorder(
-              text: 'Target: $target',
-              fontSize: 20,
-              borderColor: Colors.black,
-            ),
-            const SizedBox(height: 10),
-            // Отображаем ячейки для выбранных чисел
-            Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              alignment: WrapAlignment.center,
-              children: sumAnswer.map((val) {
-                return Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Center(
-                    child: Text(
-                      val != null ? val.toString() : '',
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-          ],
-        );
+        return _buildSumOfNumbersWidget(puzzle);
       case PuzzleType.logicalSequence:
-        final sequence = List<int>.from(puzzle.data['sequence'] as List);
-        final options = List<int>.from(puzzle.data['options'] as List);
-        return Column(
-          children: [
-            TextWithBorder(
-              text: "Sequence: ${sequence.join(", ")} , ?",
-              fontSize: 20,
-              borderColor: Colors.black,
-            ),
-            const SizedBox(height: 10),
-            Wrap(
-              spacing: 10,
-              children: options.map((opt) {
-                return ChoiceChip(
-                  label: Text('$opt'),
-                  selected: selectedChoice == opt,
-                  onSelected: (val) {
-                    setState(() {
-                      selectedChoice = val ? opt : null;
-                    });
-                  },
-                );
-              }).toList(),
-            ),
-          ],
-        );
+        return _buildLogicalSequenceWidget(puzzle);
       case PuzzleType.mathEquation:
-        final equation = puzzle.data['equation'] as String;
-        final choices = List<int>.from(puzzle.data['choices'] as List);
-        return Column(
-          children: [
-            TextWithBorder(
-              text: equation,
-              fontSize: 20,
-              borderColor: Colors.black,
-            ),
-            const SizedBox(height: 10),
-            Wrap(
-              spacing: 10,
-              children: choices.map((c) {
-                return ChoiceChip(
-                  label: Text('$c'),
-                  selected: selectedChoice == c,
-                  onSelected: (val) {
-                    setState(() {
-                      selectedChoice = val ? c : null;
-                    });
-                  },
-                );
-              }).toList(),
-            ),
-          ],
-        );
+        return _buildMathEquationWidget(puzzle);
       case PuzzleType.symbolicAnagram:
-        final letters = List<String>.from(puzzle.data['letters'] as List);
-        return Column(
-          children: [
-            TextWithBorder(
-              text: "Letters: ${letters.join(", ")}",
-              fontSize: 20,
-              borderColor: Colors.black,
-            ),
-
-            const SizedBox(height: 10),
-            // Можно добавить ячейки, но пока оставим textfield
-            Container(
-              color: Colors.white,
-              child: TextField(
-                controller: textController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Type the word',
-                ),
-              ),
-            ),
-          ],
-        );
+        return _buildSymbolicAnagramWidget(puzzle);
       case PuzzleType.cipherCode:
-        final cipher = puzzle.data['cipher'] as String;
-        final shift = puzzle.data['shift'] as int;
-        return Column(
-          children: [
-            TextWithBorder(
-              text: 'Cipher: $cipher (shift: $shift)',
-              fontSize: 20,
-              borderColor: Colors.black,
-            ),
-            const SizedBox(height: 10),
-            Container(
-              color: Colors.white,
-              child: TextField(
-                controller: textController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Type decoded text',
-                ),
-              ),
-            ),
-          ],
-        );
+        return _buildCipherCodeWidget(puzzle);
       default:
-        return const Text(
-          'Unknown puzzle type',
-          style: TextStyle(color: Colors.white),
-        );
+        return const Text('Unknown puzzle type',
+            style: TextStyle(color: Colors.white));
     }
   }
 
+  Widget _buildSumOfNumbersWidget(Puzzle puzzle) {
+    final target = puzzle.data['target'] as int;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildHelpText('Target: $target'),
+        const Gap(10),
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          alignment: WrapAlignment.center,
+          children: sumAnswer.map((val) {
+            return Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(4)),
+              child: Center(
+                  child: Text(val?.toString() ?? '',
+                      style: const TextStyle(fontSize: 18))),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLogicalSequenceWidget(Puzzle puzzle) {
+    final sequence = List<int>.from(puzzle.data['sequence'] as List);
+    final options = List<int>.from(puzzle.data['options'] as List);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildHelpText("Sequence: ${sequence.join(", ")} , ?"),
+        const Gap(10),
+        _buildChoiceChips(options),
+      ],
+    );
+  }
+
+  Widget _buildMathEquationWidget(Puzzle puzzle) {
+    final equation = puzzle.data['equation'] as String;
+    final choices = List<int>.from(puzzle.data['choices'] as List);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildHelpText(equation),
+        const Gap(10),
+        _buildChoiceChips(choices),
+      ],
+    );
+  }
+
+  Widget _buildSymbolicAnagramWidget(Puzzle puzzle) {
+    final letters = List<String>.from(puzzle.data['letters'] as List);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildHelpText("Letters: ${letters.join(", ")}"),
+        const Gap(10),
+        _buildTextField(),
+      ],
+    );
+  }
+
+  Widget _buildCipherCodeWidget(Puzzle puzzle) {
+    final cipher = puzzle.data['cipher'] as String;
+    final shift = puzzle.data['shift'] as int;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildHelpText('Cipher: $cipher (shift: $shift)'),
+        const Gap(10),
+        _buildTextField()
+      ],
+    );
+  }
+
+  CupertinoTextField _buildTextField() {
+    return CupertinoTextField(
+      controller: textController,
+      textAlign: TextAlign.center,
+      readOnly: true,
+      style: const TextStyle(
+        color: Colors.white,
+        fontSize: 24,
+      ),
+      placeholder: 'Answer',
+      placeholderStyle: const TextStyle(color: Colors.grey, fontSize: 24),
+      decoration: const BoxDecoration(
+        color: Colors.transparent,
+      ),
+    );
+  }
+
+  TextWithBorder _buildHelpText(String text) {
+    return TextWithBorder(
+      text: text,
+      fontSize: 20,
+      borderColor: Colors.black,
+    );
+  }
+
+  Wrap _buildChoiceChips(List<int> choices) {
+    return Wrap(
+      spacing: 10,
+      children: choices.map((c) {
+        return ChoiceChip(
+          label: Text('$c',
+              style: const TextStyle(fontSize: 18, fontFamily: 'Gulya')),
+          selected: selectedChoice == c,
+          onSelected: (val) => setState(() => selectedChoice = val ? c : null),
+        );
+      }).toList(),
+    );
+  }
+
+  // ------------------ Кнопка подтверждения (если нужно) ------------------
   Widget _buildConfirmButtonIfNeeded(Puzzle puzzle) {
-    // Для logicalSequence и mathEquation нужен confirm
-    // Для sumOfNumbers confirm будет на клавиатуре
-    // Для anagram, cipher confirm на клавиатуре
-    // Здесь только для logicalSequence и mathEquation
+    // Для логической последовательности / мат. выражения нужна кнопка
     if (puzzle.type == PuzzleType.logicalSequence ||
         puzzle.type == PuzzleType.mathEquation) {
       return ElevatedButton(
-        onPressed: () => checkSolution(puzzle),
+        onPressed: () => _checkSolution(puzzle),
         child: const Text('CONFIRM'),
       );
     }
     return const SizedBox.shrink();
   }
 
-  Widget _buildInputMethod(Puzzle puzzle) {
+  // ------------------ Клавиатура / Ввод для разных типов ------------------
+  Widget _buildPuzzleKeyboard(Puzzle puzzle) {
     switch (puzzle.type) {
+      case PuzzleType.sumOfNumbers:
+        return _buildRestrictedNumPad(puzzle);
       case PuzzleType.symbolicAnagram:
       case PuzzleType.cipherCode:
         return _buildQWERTYKeyboard(puzzle);
-      case PuzzleType.sumOfNumbers:
-        return _buildRestrictedNumPad(puzzle);
-      case PuzzleType.logicalSequence:
-      case PuzzleType.mathEquation:
-        // options + confirm уже есть
-        return const SizedBox.shrink();
       default:
         return const SizedBox.shrink();
     }
   }
 
   Widget _buildRestrictedNumPad(Puzzle puzzle) {
-    // Только символы из data["numbers"], + ⌫ и CONFIRM
-    final numbers = List<int>.from(puzzle.data['numbers'] as List);
-    // Сортируем для удобства
-    numbers.sort();
+    // Клавиатура для sumOfNumbers
+    final numbers = List<int>.from(puzzle.data['numbers'] as List)..sort();
 
-    // Построим клавиатуру на основе доступных чисел
-    // Например, если numbers = [1,9,2], мы сделаем клавиши [1,2,9] + ⌫ + CONFIRM
-    List<String> keys = numbers.map((e) => e.toString()).toList();
-    // Добавляем специальные клавиши
-    // Поскольку нет HINT, оставим только ⌫ и CONFIRM
-    // Расположим их внизу
-    // Например:
-    // [1][2][9]
-    // [⌫][CONFIRM]
-    // Можно по-разному располагать, ниже простой вариант:
     return Column(
       children: [
         Wrap(
           spacing: 10,
-          children: keys.map((k) {
-            return SizedBox(
-              width: 50,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () => handleSumOfNumbersInput(k, puzzle),
-                child: Text(
-                  k,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            );
+          children: numbers.map((num) {
+            return _buildNumPadButton(num.toString(), puzzle);
           }).toList(),
         ),
-        const SizedBox(height: 10),
+        const Gap(10),
         Wrap(
           spacing: 10,
           children: [
-            SizedBox(
-              width: 50,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () => handleSumOfNumbersInput('⌫', puzzle),
-                child: const Text(
-                  '⌫',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ),
+            _buildNumPadButton('⌫', puzzle),
             SizedBox(
               width: 80,
               height: 50,
               child: ElevatedButton(
-                onPressed: () => checkSolution(puzzle),
-                child: const Text(
-                  'CONFIRM',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
+                onPressed: () => _checkSolution(puzzle),
+                child: const Text('CONFIRM',
+                    style: TextStyle(color: Colors.black)),
               ),
             ),
           ],
@@ -508,33 +402,35 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 
-  void handleSumOfNumbersInput(String key, Puzzle puzzle) {
+  Widget _buildNumPadButton(String label, Puzzle puzzle) {
+    return SizedBox(
+      width: 50,
+      height: 50,
+      child: ElevatedButton(
+        onPressed: () => _handleNumPadInput(label, puzzle),
+        child: Text(label, style: const TextStyle(color: Colors.black)),
+      ),
+    );
+  }
+
+  void _handleNumPadInput(String key, Puzzle puzzle) {
     setState(() {
       final solutionList = puzzle.solution as List;
-      final maxLength = solutionList.length; // ограничение по кол-ву символов
+      final maxLen = solutionList.length;
 
       if (key == '⌫') {
-        // Удаляем последний заполненный элемент
-        for (int i = maxLength - 1; i >= 0; i--) {
+        // Удаляем последний заполненный
+        for (int i = maxLen - 1; i >= 0; i--) {
           if (sumAnswer[i] != null) {
             sumAnswer[i] = null;
             break;
           }
         }
       } else {
-        // Проверим, не превысили ли мы ограничение по длине
-        // Найдем первую свободную ячейку
-        int? freeIndex;
-        for (int i = 0; i < maxLength; i++) {
-          if (sumAnswer[i] == null) {
-            freeIndex = i;
-            break;
-          }
-        }
-        if (freeIndex != null) {
-          // Заполняем
-          int val = int.parse(key);
-          sumAnswer[freeIndex] = val;
+        // Добавляем число в первую свободную ячейку
+        final idx = sumAnswer.indexWhere((e) => e == null);
+        if (idx != -1) {
+          sumAnswer[idx] = int.parse(key);
         }
       }
     });
@@ -553,27 +449,19 @@ class _QuizScreenState extends State<QuizScreen> {
       children: keyboardRows.map((row) {
         return Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: row.map((letter) {
-            bool isWideButton = (letter == 'CONFIRM' || letter == 'HINT');
+          children: row.map((char) {
+            bool isWide = (char == 'CONFIRM');
             return Padding(
               padding:
                   const EdgeInsets.symmetric(horizontal: 2.0, vertical: 4.0),
               child: SizedBox(
-                width: isWideButton ? 160 : 40,
+                width: isWide ? 120 : 40,
                 height: 40,
                 child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(padding: EdgeInsets.zero),
-                  onPressed: () => handleQWERTYInput(letter, puzzle),
+                  onPressed: () => _handleQWERTYInput(char, puzzle),
                   child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      letter,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
+                      child: Text(char,
+                          style: const TextStyle(color: Colors.black))),
                 ),
               ),
             );
@@ -583,130 +471,109 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 
-  void handleQWERTYInput(String letter, Puzzle puzzle) {
+  void _handleQWERTYInput(String char, Puzzle puzzle) {
+    int length = 0;
+    if (puzzle.type == PuzzleType.symbolicAnagram) {
+      length = (puzzle.data['letters'] as List).length;
+    } else if (puzzle.type == PuzzleType.cipherCode) {
+      length = (puzzle.data['cipher'] as String).length;
+    }
     setState(() {
-      if (letter == 'CONFIRM') {
-        checkSolution(puzzle);
-      } else if (letter == '⌫') {
+      if (char == 'CONFIRM') {
+        _checkSolution(puzzle);
+      } else if (char == '⌫') {
         if (textController.text.isNotEmpty) {
           textController.text =
               textController.text.substring(0, textController.text.length - 1);
         }
       } else {
-        textController.text += letter;
+        if (textController.text.characters.length < length) {
+          textController.text += char;
+          textController.selection = TextSelection.fromPosition(
+            TextPosition(offset: textController.text.length),
+          );
+        }
       }
     });
   }
 
-  void checkSolution(Puzzle puzzle) {
+  // ------------------ Проверка решения ------------------
+  void _checkSolution(Puzzle puzzle) {
     switch (puzzle.type) {
       case PuzzleType.sumOfNumbers:
-        context.read<AppBloc>().add(
-              CheckPuzzleSolution(
-                  widget.puzzleId, sumAnswer.map((e) => e ?? 0).toList(),
-                  (PuzzleStatus status) {
-                if (status == PuzzleStatus.completed) {
-                  showWinDialog(context, true, puzzle);
-                }
-                if (status == PuzzleStatus.failed) {
-                  showWinDialog(context, false, puzzle);
-                } else {
-                  isError = true;
-                }
-              }),
-            );
+        _puzzleCheck(puzzle, sumAnswer.map((e) => e ?? 0).toList());
       case PuzzleType.mathEquation:
       case PuzzleType.logicalSequence:
-        context.read<AppBloc>().add(CheckPuzzleSolution(
-                widget.puzzleId, selectedChoice ?? 0, (PuzzleStatus status) {
-              if (status == PuzzleStatus.completed) {
-                showWinDialog(context, true, puzzle);
-              }
-              if (status == PuzzleStatus.failed) {
-                showWinDialog(context, false, puzzle);
-              } else {
-                isError = true;
-              }
-            }));
-      case PuzzleType.cipherCode:
+        _puzzleCheck(puzzle, selectedChoice ?? 0);
       case PuzzleType.symbolicAnagram:
-        context.read<AppBloc>().add(CheckPuzzleSolution(
-                widget.puzzleId, textController.text.toUpperCase(),
-                (PuzzleStatus status) {
-              if (status == PuzzleStatus.completed) {
-                showWinDialog(context, true, puzzle);
-              }
-              if (status == PuzzleStatus.failed) {
-                showWinDialog(context, false, puzzle);
-              } else {
-                isError = true;
-              }
-            }));
+      case PuzzleType.cipherCode:
+        _puzzleCheck(puzzle, textController.text.toUpperCase());
+      default:
+        // Ничего не делаем
+        break;
     }
   }
 
-  void showWinDialog(BuildContext context, bool isWinner, Puzzle puzzle) {
+  void _puzzleCheck(Puzzle puzzle, dynamic answer) {
+    context.read<AppBloc>().add(
+          CheckPuzzleSolution(widget.puzzleId, answer, (PuzzleStatus status) {
+            switch (status) {
+              case PuzzleStatus.completed:
+                _showPuzzleResultDialog(true, puzzle);
+              case PuzzleStatus.failed:
+                _showPuzzleResultDialog(false, puzzle);
+              default:
+                setState(() => isError = true);
+            }
+          }),
+        );
+  }
+
+  // ------------------ Диалоговый результат ------------------
+  void _showPuzzleResultDialog(bool isWinner, Puzzle puzzle) {
     _timer.cancel();
     showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.transparent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          content: Container(
-            width: MediaQuery.of(context).size.width,
-            height: 217,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  isWinner ? 'YOU WIN' : 'YOU LOSE',
+      builder: (_) => AlertDialog(
+        backgroundColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        content: Container(
+          width: MediaQuery.of(context).size.width,
+          height: 217,
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(16)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(isWinner ? 'YOU WIN' : 'YOU LOSE',
                   style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
+                      fontSize: 28, fontWeight: FontWeight.bold)),
+              if (isWinner)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('+${puzzle.coinsReward} Coins ',
+                        style: const TextStyle(
+                            color: Colors.orange, fontSize: 20)),
+                    Text('+${puzzle.scoreReward} Score',
+                        style: const TextStyle(
+                            color: Colors.orange, fontSize: 20)),
+                  ],
                 ),
-                if (isWinner)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '+${puzzle.coinsReward} Coins',
-                        style:
-                            const TextStyle(color: Colors.orange, fontSize: 20),
-                      ),
-                      Text(
-                        '+${puzzle.scoreReward} Score',
-                        style:
-                            const TextStyle(color: Colors.orange, fontSize: 20),
-                      ),
-                    ],
-                  ),
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    context
-                      ..pop()
-                      ..pop();
-                  },
-                  style:
-                      ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-                  child: Text(isWinner ? 'Next' : 'Close'),
-                ),
-              ],
-            ),
+              const Gap(20),
+              ElevatedButton(
+                onPressed: () {
+                  context.pop();
+                  context.pop();
+                },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+                child: Text(isWinner ? 'Next' : 'Close'),
+              ),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
