@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:simple_gradient_text/simple_gradient_text.dart' as gradientText;
 
 class GradientText extends StatelessWidget {
   final bool isCenter;
@@ -15,21 +16,6 @@ class GradientText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gradient = LinearGradient(
-      colors: [
-        Color(0xFFFDFCFC),
-        Color(0xFFFFF700),
-        Color(0xFFFF5900),
-      ],
-      stops: [
-        0,
-        0.6,
-        1,
-      ],
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-    );
-
     return Stack(
       children: [
         Text(
@@ -45,20 +31,26 @@ class GradientText extends StatelessWidget {
               ..color = Color(0xFF5F0B0C),
           ),
         ),
-        ShaderMask(
-          blendMode: BlendMode.srcIn,
-          shaderCallback: (bounds) => gradient.createShader(
-            Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+        gradientText.GradientText(
+        text,
+          textAlign: isCenter ? TextAlign.center : null,
+          style: TextStyle(
+            color: Color(0xFFFFF700),
+            fontSize: fontSize,
+            fontFamily: 'Gulya',
           ),
-          child: Text(
-            text,
-            textAlign: isCenter ? TextAlign.center : null,
-            style: TextStyle(
-              color: Color(0xFFFFF700),
-              fontSize: fontSize,
-              fontFamily: 'Gulya',
-            ),
-          ),
+          gradientDirection: gradientText.GradientDirection.ttb,
+          gradientType: gradientText.GradientType.linear,
+          stops: [
+            0,
+            0.5,
+            1,
+          ],
+          colors: [
+            Color(0xFFFDFCFC),
+            Color(0xFFFFF700),
+            Color(0xFFFF5900),
+          ],
         ),
       ],
     );
