@@ -10,6 +10,7 @@ import 'package:brainstorm_quest/src/feature/game/bloc/app_bloc.dart';
 import 'package:brainstorm_quest/src/feature/game/model/puzzle.dart';
 import 'package:brainstorm_quest/src/feature/game/model/user.dart';
 import 'package:brainstorm_quest/ui_kit/app_button/app_button.dart';
+import 'package:brainstorm_quest/ui_kit/app_card.dart';
 import 'package:brainstorm_quest/ui_kit/gradient_text_with_border.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -31,128 +32,140 @@ class MainScreen extends StatelessWidget {
           return Scaffold(body: Center(child: Text(state.message)));
         }
         if (state is AppLoaded) {
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 14),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildFlagItem(
-                      () {
-                        context.push(
-                          "${RouteValue.home.path}/${RouteValue.achievements.path}",
-                        );
-                      },
-                      AppIcon(
-                        asset: IconProvider.achievement.buildImageUrl(),
-                        width: 64,
-                        height: 64,
+          return SafeArea(
+            top: false,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildFlagItem(
+                        () {
+                          context.push(
+                            "${RouteValue.home.path}/${RouteValue.achievements.path}",
+                          );
+                        },
+                        AppIcon(
+                          asset: IconProvider.achievement.buildImageUrl(),
+                          width: 64,
+                          height: 64,
+                        ),
+                        [
+                          const Color(0xFF14A8E8),
+                          const Color(0xFF00438F),
+                        ],
+                        context,
+                        const Color(0xFF01336e),
+                        width: 75,
+                        height: 118,
                       ),
-                      [
-                        const Color(0xFF14A8E8),
-                        const Color(0xFF00438F),
-                      ],
-                      context,
-                      const Color(0xFF01336e),
-                      width: 75,
-                      height: 118,
-                    ),
-                    const Spacer(),
-                    _buildFlagItem(
-                      () {
-                        showBuyHintDialog(context);
-                      },
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              AppIcon(
-                                asset: IconProvider.hint.buildImageUrl(),
-                                width: 35,
-                                height: 66,
-                              ),
-                              Positioned(
-                                left: -11,
-                                bottom: 15,
-                                child: AppIcon(
-                                  asset: IconProvider.plus.buildImageUrl(),
-                                  width: 23,
-                                  height: 23,
+                      const Spacer(),
+                      _buildFlagItem(
+                        () {
+                          showBuyHintDialog(context);
+                        },
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                AppIcon(
+                                  asset: IconProvider.hint.buildImageUrl(),
+                                  width: 35,
+                                  height: 66,
                                 ),
-                              ),
-                            ],
-                          ),
-                          const Gap(8),
-                          TextWithBorder(
-                            text: state.user.hints.toString(),
-                            borderColor: const Color(0xFF00520F),
-                            fontSize: 34,
-                          ),
+                                Positioned(
+                                  left: -11,
+                                  bottom: 15,
+                                  child: AppIcon(
+                                    asset: IconProvider.plus.buildImageUrl(),
+                                    width: 23,
+                                    height: 23,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Gap(8),
+                            TextWithBorder(
+                              text: state.user.hints.toString(),
+                              borderColor: const Color(0xFF00520F),
+                              fontSize: 34,
+                            ),
+                          ],
+                        ),
+                        [
+                          const Color(0xFF14E83B),
+                          const Color(0xFF008F11),
                         ],
+                        context,
+                        const Color(0xFF006f0f),
                       ),
-                      [
-                        const Color(0xFF14E83B),
-                        const Color(0xFF008F11),
-                      ],
-                      context,
-                      const Color(0xFF006f0f),
-                    ),
-                    const Gap(15),
-                    _buildFlagItem(
-                      null,
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          AppIcon(
-                            asset: IconProvider.coins.buildImageUrl(),
-                            width: 52,
-                            height: 61,
-                          ),
-                          const Gap(8),
-                          TextWithBorder(
-                            text: state.user.coins.toString(),
-                            borderColor: const Color(0xFF521600),
-                            fontSize: 34,
-                          ),
+                      const Gap(15),
+                      _buildFlagItem(
+                        null,
+                        Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            AppIcon(
+                              asset: IconProvider.coins.buildImageUrl(),
+                              width: 52,
+                              height: 61,
+                            ),
+                            const Gap(8),
+                            TextWithBorder(
+                              text: state.user.coins.toString(),
+                              borderColor: const Color(0xFF521600),
+                              fontSize: 34,
+                            ),
+                          ],
+                        ),
+                        [
+                          const Color(0xFFE89E14),
+                          const Color(0xFFFF4400),
                         ],
+                        context,
+                        const Color(0xFFbf3500),
                       ),
-                      [
-                        const Color(0xFFE89E14),
-                        const Color(0xFFFF4400),
-                      ],
-                      context,
-                      const Color(0xFFbf3500),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              RoundedPieChart(
-                isHomeScreen: true,
-                points: state.user.points,
-                value: state.user.points.toDouble() /
-                    state.puzzles.fold(
-                      0,
-                      (sum, element) => sum + element.scoreReward,
-                    ),
-              ),
-              //  CustomProgressIndicator(
-              //    value: state.user.points.toDouble(),
-              //  ),
+                Spacer(),
+                Center(
+                  child: RoundedPieChart(
+                    isHomeScreen: true,
+                    points: state.user.points,
+                    value: state.user.points.toDouble() /
+                        state.puzzles.fold(
+                          0,
+                          (sum, element) => sum + element.scoreReward,
+                        ),
+                  ),
+                ),
+                //  CustomProgressIndicator(
+                //    value: state.user.points.toDouble(),
+                //  ),
 
-              const Gap(15),
-              AppButton(
-                onPressed: () => context
-                    .push("${RouteValue.home.path}/${RouteValue.select.path}"),
-              ),
-              AppButton(
-                onPressed: () => context.push(
-                    "${RouteValue.home.path}/${RouteValue.dayli.path}",
-                    extra: "d${DateTime.now().weekday}"),
-              ),
-            ],
+                Spacer(),
+                AppButton(
+                  text: 'select riddle',
+                  color: ButtonColors.purple,
+                  onPressed: () => context
+                      .push("${RouteValue.home.path}/${RouteValue.select.path}",),
+                ),
+                Gap(14),
+                AppButton(
+                  color: ButtonColors.yellow,
+                  text: 'everyday riddle',
+                  onPressed: () => context.push(
+                      "${RouteValue.home.path}/${RouteValue.dayli.path}",
+                      extra: "d${DateTime.now().weekday}"),
+                ),
+                Gap(14),
+              ],
+            ),
           );
         }
         return const SizedBox.shrink();
@@ -243,6 +256,7 @@ void showBuyHintDialog(BuildContext context) {
           width: 295,
           height: 416,
           child: Stack(
+            alignment: Alignment.bottomCenter,
             children: [
               Container(
                 decoration: ShapeDecoration(
@@ -341,21 +355,24 @@ void showBuyHintDialog(BuildContext context) {
                   ],
                 ),
               ),
-              Container(
-                width: 295,
-                height: 95,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(
-                      IconProvider.aab.buildImageUrl(),
+              Positioned(
+                top: 0,
+                child: Container(
+                  width: 295,
+                  height: 95,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(
+                        IconProvider.aab.buildImageUrl(),
+                      ),
+                      fit: BoxFit.fitWidth,
                     ),
-                    fit: BoxFit.fitWidth,
                   ),
-                ),
-                child: const Center(
-                  child: GradientText(
-                    'BUY A HINT',
-                    fontSize: 33,
+                  child: const Center(
+                    child: GradientText(
+                      'BUY A HINT',
+                      fontSize: 33,
+                    ),
                   ),
                 ),
               ),
@@ -394,8 +411,9 @@ void showBuyHintDialog(BuildContext context) {
                 ),
               ),
               Positioned(
-                  bottom: 0,
-                  child: AppButton(onPressed: () {
+                  bottom: 20,
+                  child: AppButton(color: ButtonColors.yellow, text: 'buy',  width: 183,
+                      height: 69, onPressed: () {
                     Navigator.of(context).pop();
                     context.read<AppBloc>().add(BuyHint());
                   }))

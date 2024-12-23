@@ -1,7 +1,9 @@
 import 'package:brainstorm_quest/main.dart';
+import 'package:brainstorm_quest/src/core/utils/size_utils.dart';
 import 'package:brainstorm_quest/src/feature/game/bloc/app_bloc.dart';
 import 'package:brainstorm_quest/src/feature/game/model/achievement.dart';
 import 'package:brainstorm_quest/src/feature/game/model/user.dart';
+import 'package:brainstorm_quest/ui_kit/app_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,10 +22,14 @@ class AchievementsScreen extends StatelessWidget {
           return Scaffold(body: Center(child: Text(state.message)));
         }
         if (state is AppLoaded) {
-          return ScreenLayout(
-            topSection: _buildBackButton(context),
-            middleSection: _buildAchievementsList(state.user, state.achievements),
-            bottomSection: SizedBox.shrink(), // Пустое пространство
+          return SingleChildScrollView(
+            child: SafeArea(
+              child: Column(
+                children: [
+                  _buildAchievementsList(state.user, state.achievements, context)
+                ], // Пустое пространство
+              ),
+            ),
           );
         }
         return const SizedBox.shrink();
@@ -45,34 +51,21 @@ class AchievementsScreen extends StatelessWidget {
   }
 
   // Список достижений
-  Widget _buildAchievementsList(User user, List<Achievement> achievements) {
+  Widget _buildAchievementsList(User user, List<Achievement> achievements, BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: GridView.builder(
-        shrinkWrap: true,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3, // Три карточки в ряд
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-          childAspectRatio: 0.75, // Пропорции карточки
-        ),
-        itemCount: achievements.length, // Количество достижений
-        itemBuilder: (context, index) {
-          return _buildAchievementCard(index, achievements[index], user);
-        },
+      padding: const EdgeInsets.symmetric(horizontal: 7),
+      child: Wrap(
+        spacing: 7,
+        runSpacing: 7,
+        children: achievements.map((achievement) {
+          return _buildAchievementCard(achievement, user, context);
+        }).toList(),
       ),
     );
   }
 
-  // Карточка достижения
-  Widget _buildAchievementCard(int index, Achievement achievement, User user) {
-    return Card(
-      color: user.unlockedAchievements.contains(achievement.id)
-          ? Colors.green
-          : Colors.red, // Цвет чередуется
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+  Widget _buildAchievementCard(Achievement achievement, User user, BuildContext context) {
+    return AppCard(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -87,6 +80,12 @@ class AchievementsScreen extends StatelessWidget {
               style: TextStyle(color: Colors.white70, fontSize: 12)),
         ],
       ),
+      width: ((getWidth(context, percent: 1) / 3) - 28),
+      height: getHeight(context, baseSize: 111),
+      color: user.unlockedAchievements.contains(achievement.id)
+          ? AppContainerColor.green
+          : AppContainerColor.red,
+      bottomShadowHeight: 5,
     );
   }
 }
