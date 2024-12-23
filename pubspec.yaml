@@ -20,13 +20,9 @@ dependencies:
   cupertino_icons: ^1.0.8
   flutter_localizations:
     sdk: flutter
-  advertising_id: ^2.7.1
-  printing: ^5.13.4
-  pdf: ^3.11.1
   uuid: ^4.5.1
   flutter_svg: ^2.0.10+1
-
-
+  loading_indicator: ^3.1.1
 
 dev_dependencies:
   flutter_test:
@@ -40,5 +36,8 @@ flutter:
      - assets/images/
      - assets/fonts/
      - assets/json/
-
+  fonts:
+    - family: Gulya
+      fonts:
+        - asset: assets/fonts/Gulya.otf
  

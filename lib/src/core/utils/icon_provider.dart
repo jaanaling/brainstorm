@@ -17,6 +17,7 @@ enum IconProvider {
   score(imageName: 'score.png'),
   timer(imageName: 'timer.png'),
   yellowB(imageName: 'yellowb.png'),
+  plus(imageName: 'plus.png'),
 
   unknown(imageName: '');
 
