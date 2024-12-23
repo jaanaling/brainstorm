@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:brainstorm_quest/ui_kit/app_button/app_button.dart';
 import 'package:brainstorm_quest/ui_kit/app_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +92,8 @@ class _QuizScreenState extends State<QuizScreen> {
         builder: (_, state) {
           if (state is AppLoading) {
             return const Scaffold(
-                body: Center(child: CircularProgressIndicator()));
+              body: Center(child: CircularProgressIndicator()),
+            );
           }
           if (state is AppError) {
             return Scaffold(body: Center(child: Text(state.message)));
@@ -162,14 +164,36 @@ class _QuizScreenState extends State<QuizScreen> {
         children: [
           const AppBackButton(),
           const Spacer(),
-          _buildStatusColumn(IconProvider.timer.buildImageUrl(),
-              _secondsLeft.toString().padLeft(2, '0')),
+          _buildStatusColumn(
+            IconProvider.timer.buildImageUrl(),
+            _secondsLeft.toString().padLeft(2, '0'),
+          ),
           const Gap(30),
           _buildStatusColumn(
-              IconProvider.hp.buildImageUrl(), puzzle.attempts.toString()),
+            IconProvider.hp.buildImageUrl(),
+            puzzle.attempts.toString(),
+          ),
           const Gap(20),
-          _buildStatusColumn(
-              IconProvider.hint.buildImageUrl(), user.hints.toString()),
+          CupertinoButton(
+            onPressed: () => isHintUsed ? null : _useHint(user),
+            padding: EdgeInsets.zero,
+            child: Stack(
+              children: [
+                _buildStatusColumn(
+                  IconProvider.hint.buildImageUrl(),
+                  user.hints.toString(),
+                ),
+                if (isHintUsed)
+                  Positioned(
+                      right: 0,
+                      top: 0,
+                      child: Icon(
+                        CupertinoIcons.check_mark_circled_solid,
+                        color: Colors.white,
+                      )),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -223,8 +247,10 @@ class _QuizScreenState extends State<QuizScreen> {
       case PuzzleType.cipherCode:
         return _buildCipherCodeWidget(puzzle);
       default:
-        return const Text('Unknown puzzle type',
-            style: TextStyle(color: Colors.white));
+        return const Text(
+          'Unknown puzzle type',
+          style: TextStyle(color: Colors.white),
+        );
     }
   }
 
@@ -244,10 +270,15 @@ class _QuizScreenState extends State<QuizScreen> {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(4)),
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(4),
+              ),
               child: Center(
-                  child: Text(val?.toString() ?? '',
-                      style: const TextStyle(fontSize: 18))),
+                child: Text(
+                  val?.toString() ?? '',
+                  style: const TextStyle(fontSize: 18),
+                ),
+              ),
             );
           }).toList(),
         ),
@@ -301,7 +332,7 @@ class _QuizScreenState extends State<QuizScreen> {
       children: [
         _buildHelpText('Cipher: $cipher (shift: $shift)'),
         const Gap(10),
-        _buildTextField()
+        _buildTextField(),
       ],
     );
   }
@@ -336,8 +367,13 @@ class _QuizScreenState extends State<QuizScreen> {
       spacing: 10,
       children: choices.map((c) {
         return ChoiceChip(
-          label: Text('$c',
-              style: const TextStyle(fontSize: 18, fontFamily: 'Gulya')),
+          selectedColor: Color(0xFF921FAE),
+          checkmarkColor: Colors.white,
+          label: TextWithBorder(
+            text: '$c',
+            borderColor: Colors.black,
+            fontSize: 18,
+          ),
           selected: selectedChoice == c,
           onSelected: (val) => setState(() => selectedChoice = val ? c : null),
         );
@@ -350,9 +386,12 @@ class _QuizScreenState extends State<QuizScreen> {
     // Для логической последовательности / мат. выражения нужна кнопка
     if (puzzle.type == PuzzleType.logicalSequence ||
         puzzle.type == PuzzleType.mathEquation) {
-      return ElevatedButton(
+      return AppButton(
         onPressed: () => _checkSolution(puzzle),
-        child: const Text('CONFIRM'),
+        width: 225,
+        height: 72,
+        color: ButtonColors.purple,
+        text: 'CONFIRM',
       );
     }
     return const SizedBox.shrink();
@@ -365,7 +404,10 @@ class _QuizScreenState extends State<QuizScreen> {
         return _buildRestrictedNumPad(puzzle);
       case PuzzleType.symbolicAnagram:
       case PuzzleType.cipherCode:
-        return _buildQWERTYKeyboard(puzzle);
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(12, 0, 12, 20),
+          child: _buildQWERTYKeyboard(puzzle),
+        );
       default:
         return const SizedBox.shrink();
     }
@@ -383,10 +425,11 @@ class _QuizScreenState extends State<QuizScreen> {
             double? topLeftRadius = num == numbers.first ? 20 : null;
             double? topRightRadius = num == numbers.last ? 20 : null;
             return _buildNumPadButton(
-                label: num.toString(),
-                puzzle: puzzle,
-                topLeftRadius: topLeftRadius,
-                topRightRadius: topRightRadius);
+              label: num.toString(),
+              puzzle: puzzle,
+              topLeftRadius: topLeftRadius,
+              topRightRadius: topRightRadius,
+            );
           }).toList(),
         ),
         const Gap(10),
@@ -394,7 +437,10 @@ class _QuizScreenState extends State<QuizScreen> {
           spacing: 10,
           children: [
             _buildNumPadButton(
-                label: '⌫', puzzle: puzzle, bottomLeftRadius: 20),
+              label: '⌫',
+              puzzle: puzzle,
+              bottomLeftRadius: 20,
+            ),
             AppCard(
               width: 61 * numbers.length - 71,
               height: 61,
@@ -418,30 +464,32 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 
-  Widget _buildNumPadButton(
-      {required String label,
-      required Puzzle puzzle,
-      double? topLeftRadius,
-      double? bottomRightRadius,
-      double? topRightRadius,
-      double? bottomLeftRadius}) {
+  Widget _buildNumPadButton({
+    required String label,
+    required Puzzle puzzle,
+    double? topLeftRadius,
+    double? bottomRightRadius,
+    double? topRightRadius,
+    double? bottomLeftRadius,
+  }) {
     return AppCard(
-        color: AppContainerColor.pink,
-        width: 51,
-        height: 61,
-        topLeftRadius: topLeftRadius,
-        topRightRadius: topRightRadius,
-        bottomRightRadius: bottomRightRadius,
-        bottomLeftRadius: bottomLeftRadius,
-        onTap: () => _handleNumPadInput(label, puzzle),
-        borderRadius: 2,
-        child: Center(
-          child: TextWithBorder(
-            text: label,
-            borderColor: Colors.black,
-            fontSize: 33,
-          ),
-        ));
+      color: AppContainerColor.pink,
+      width: 51,
+      height: 61,
+      topLeftRadius: topLeftRadius,
+      topRightRadius: topRightRadius,
+      bottomRightRadius: bottomRightRadius,
+      bottomLeftRadius: bottomLeftRadius,
+      onTap: () => _handleNumPadInput(label, puzzle),
+      borderRadius: 2,
+      child: Center(
+        child: TextWithBorder(
+          text: label,
+          borderColor: Colors.black,
+          fontSize: 33,
+        ),
+      ),
+    );
   }
 
   void _handleNumPadInput(String key, Puzzle puzzle) {
@@ -469,10 +517,10 @@ class _QuizScreenState extends State<QuizScreen> {
 
   Widget _buildQWERTYKeyboard(Puzzle puzzle) {
     final keyboardRows = [
+      ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
       ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-      ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-      ['Z', 'X', 'C', 'V', 'B', 'N', 'M', '⌫'],
-      ['CONFIRM'],
+      ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z'],
+      ['⌫', 'X', 'C', 'V', 'B', 'N', 'M', 'CONFIRM'],
     ];
 
     return Column(
@@ -482,17 +530,27 @@ class _QuizScreenState extends State<QuizScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: row.map((char) {
             bool isWide = (char == 'CONFIRM');
+            bool isNum =
+                int.tryParse(char) != null || char == '⌫' || char == 'CONFIRM';
+
             return Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 2.0, vertical: 4.0),
-              child: SizedBox(
-                width: isWide ? 120 : 40,
+              padding: const EdgeInsets.symmetric(horizontal: 2.5, vertical: 2),
+              child: AppCard(
+                onTap: () => _handleQWERTYInput(char, puzzle),
+                borderRadius: 2,
+                topLeftRadius: char == '0' ? 20 : null,
+                topRightRadius: char == '9' ? 20 : null,
+                bottomLeftRadius: char == '⌫' ? 20 : null,
+                bottomRightRadius: char == 'CONFIRM' ? 20 : null,
+                color: isNum ? AppContainerColor.pink : AppContainerColor.blue,
+                width: isWide ? 105 : 32,
                 height: 40,
-                child: ElevatedButton(
-                  onPressed: () => _handleQWERTYInput(char, puzzle),
-                  child: FittedBox(
-                      child: Text(char,
-                          style: const TextStyle(color: Colors.black))),
+                child: FittedBox(
+                  child: TextWithBorder(
+                    text: char,
+                    borderColor: Colors.black,
+                    fontSize: 30,
+                  ),
                 ),
               ),
             );
@@ -573,23 +631,37 @@ class _QuizScreenState extends State<QuizScreen> {
           width: MediaQuery.of(context).size.width,
           height: 217,
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(16)),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(isWinner ? 'YOU WIN' : 'YOU LOSE',
-                  style: const TextStyle(
-                      fontSize: 28, fontWeight: FontWeight.bold)),
+              Text(
+                isWinner ? 'YOU WIN' : 'YOU LOSE',
+                style: const TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               if (isWinner)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('+${puzzle.coinsReward} Coins ',
-                        style: const TextStyle(
-                            color: Colors.orange, fontSize: 20)),
-                    Text('+${puzzle.scoreReward} Score',
-                        style: const TextStyle(
-                            color: Colors.orange, fontSize: 20)),
+                    Text(
+                      '+${puzzle.coinsReward} Coins ',
+                      style: const TextStyle(
+                        color: Colors.orange,
+                        fontSize: 20,
+                      ),
+                    ),
+                    Text(
+                      '+${puzzle.scoreReward} Score',
+                      style: const TextStyle(
+                        color: Colors.orange,
+                        fontSize: 20,
+                      ),
+                    ),
                   ],
                 ),
               const Gap(20),

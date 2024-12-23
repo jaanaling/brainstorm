@@ -1,596 +1,2117 @@
 [
-    {
-      "id": "p1_l1",
-      "level": 1,
-      "difficulty": 1,
-      "type": "sumOfNumbers",
-      "instructions": "Select numbers that add up to 10.",
-      "data": {
-        "numbers": [1, 2, 3, 4, 5],
-        "target": 10
-      },
-      "hints": ["Try combining the largest number first."],
-      "solution": [4, 3, 3],
-      "attempts": 2,
-      "coins_reward": 1,
-      "score_reward": 1
+  {
+    "id": "p1_l1",
+    "level": 1,
+    "difficulty": 1,
+    "type": "sumOfNumbers",
+    "instructions": "Select numbers that add up to 21.",
+    "data": {
+      "numbers": [2, 3, 5, 7, 11],
+      "target": 21
     },
-    {
-      "id": "p2_l1",
-      "level": 1,
-      "difficulty": 1,
-      "type": "logicalSequence",
-      "instructions": "Find the next number in the sequence: 2, 4, 8, ?",
-      "data": {
-        "sequence": [2, 4, 8],
-        "options": [16, 10, 12]
-      },
-      "hints": ["Each term doubles the previous one."],
-      "solution": 16,
-      "attempts": 3,
-      "coins_reward": 1,
-      "score_reward": 1
+    "hints": [
+      "Consider starting from the largest prime and see what else fits."
+    ],
+    "solution": [11, 5, 3, 2],
+    "attempts": 2,
+    "coins_reward": 1,
+    "score_reward": 1
+  },
+  {
+    "id": "p2_l1",
+    "level": 1,
+    "difficulty": 1,
+    "type": "logicalSequence",
+    "instructions": "Find the next term in the sequence: 1, 3, 6, 10, ?",
+    "data": {
+      "sequence": [1, 3, 6, 10],
+      "options": [14, 15, 12]
     },
-    {
-      "id": "p3_l1",
-      "level": 1,
-      "difficulty": 1,
-      "type": "logicalSequence",
-      "instructions": "Find the next number in the sequence: 1, 2, 3, ?",
-      "data": {
-        "sequence": [1, 2, 3],
-        "options": [4, 5, 6]
-      },
-      "hints": ["It's a simple increasing sequence."],
-      "solution": 4,
-      "attempts": 3,
-      "coins_reward": 1,
-      "score_reward": 1
+    "hints": [
+      "Observe how each term grows based on the sum of previous steps."
+    ],
+    "solution": 15,
+    "attempts": 3,
+    "coins_reward": 1,
+    "score_reward": 1
+  },
+  {
+    "id": "p3_l1",
+    "level": 1,
+    "difficulty": 1,
+    "type": "logicalSequence",
+    "instructions": "Find the missing term: 1, 2, 4, 8, ? (each element depends on all before it).",
+    "data": {
+      "sequence": [1, 2, 4, 8],
+      "options": [16, 15, 12]
     },
-    {
-      "id": "p4_l1",
-      "level": 1,
-      "difficulty": 1,
-      "type": "sumOfNumbers",
-      "instructions": "Select numbers that add up to 10.",
-      "data": {
-        "numbers": [1, 9, 2],
-        "target": 10
-      },
-      "hints": ["9 + 1 = 10."],
-      "solution": [9, 1],
-      "attempts": 3,
-      "coins_reward": 1,
-      "score_reward": 1
+    "hints": [
+      "Sometimes you multiply or add everything that came prior."
+    ],
+    "solution": 16,
+    "attempts": 3,
+    "coins_reward": 1,
+    "score_reward": 1
+  },
+  {
+    "id": "p4_l1",
+    "level": 1,
+    "difficulty": 1,
+    "type": "sumOfNumbers",
+    "instructions": "Select numbers that add up to 24.",
+    "data": {
+      "numbers": [4, 7, 9, 11],
+      "target": 24
     },
+    "hints": [
+      "Sometimes the simplest approach is to join the largest pair first."
+    ],
+    "solution": [11, 9, 4],
+    "attempts": 3,
+    "coins_reward": 1,
+    "score_reward": 1
+  },
+  {
+    "id": "p5_l1",
+    "level": 1,
+    "difficulty": 2,
+    "type": "mathEquation",
+    "instructions": "Complete the equation: 12 / ? + 3 = 7",
+    "data": {
+      "equation": "12 / ? + 3 = 7",
+      "choices": [2, 3, 4]
+    },
+    "hints": [
+      "Try to isolate the unknown by reversing the last operation."
+    ],
+    "solution": 3,
+    "attempts": 3,
+    "coins_reward": 2,
+    "score_reward": 2
+  },
+  {
+    "id": "p6_l1",
+    "level": 1,
+    "difficulty": 2,
+    "type": "symbolicAnagram",
+    "instructions": "Rearrange letters to form a valid word:I ,E, S, L, N, T ",
+    "data": {
+      "letters": ["S", "I", "L", "E", "N", "T"],
+      "valid_words": ["SILENT", "LISTEN", "ENLIST"]
+    },
+    "hints": [
+      "Consider the idea of hearing without noise."
+    ],
+    "solution": "SILENT",
+    "attempts": 3,
+    "coins_reward": 2,
+    "score_reward": 2
+  },
+  {
+    "id": "p7_l1",
+    "level": 1,
+    "difficulty": 2,
+    "type": "mathEquation",
+    "instructions": "Solve: (15 - ?) / 3 = 2",
+    "data": {
+      "equation": "(15 - ?) / 3 = 2",
+      "choices": [9, 6, 3]
+    },
+    "hints": [
+      "Scaling the equation back up can expose the missing piece."
+    ],
+    "solution": 9,
+    "attempts": 3,
+    "coins_reward": 2,
+    "score_reward": 2
+  },
+  {
+    "id": "p8_l1",
+    "level": 1,
+    "difficulty": 3,
+    "type": "cipherCode",
+    "instructions": "Decode 'FUBSW' using a Caesar cipher (shift -3).",
+    "data": {
+      "cipher": "FUBSW",
+      "shift": -3
+    },
+    "hints": [
+      "Shifting each letter backwards might spell something cryptic."
+    ],
+    "solution": "CRYPT",
+    "attempts": 3,
+    "coins_reward": 3,
+    "score_reward": 3
+  },
+  {
+    "id": "p9_l1",
+    "level": 1,
+    "difficulty": 3,
+    "type": "cipherCode",
+    "instructions": "Decode 'AMBC' using a Caesar cipher (shift +2).",
+    "data": {
+      "cipher": "AMBC",
+      "shift": 2
+    },
+    "hints": [
+      "Step each character forward to reveal something elemental."
+    ],
+    "solution": "CODE",
+    "attempts": 3,
+    "coins_reward": 3,
+    "score_reward": 3
+  },
+  {
+    "id": "p10_l1",
+    "level": 1,
+    "difficulty": 4,
+    "type": "symbolicAnagram",
+    "instructions": "Rearrange letters: R, E, A, T, H.",
+    "data": {
+      "letters": ["R", "E", "A", "T", "H"],
+      "valid_words": ["HEART", "EARTH", "HATER", "RATHE"]
+    },
+    "hints": [
+      "Sometimes it's the entire world, or a vital organ."
+    ],
+    "solution": "EARTH",
+    "attempts": 3,
+    "coins_reward": 4,
+    "score_reward": 4
+  },
+
+
+  {
+    "id": "p1_l2",
+    "level": 2,
+    "difficulty": 1,
+    "type": "sumOfNumbers",
+    "instructions": "Select numbers that add up to 40.",
+    "data": {
+      "numbers": [5, 10, 15, 10],
+      "target": 40
+    },
+    "hints": [
+      "Uniting everything might bring harmony in one sum."
+    ],
+    "solution": [5, 10, 15, 10],
+    "attempts": 3,
+    "coins_reward": 1,
+    "score_reward": 2
+  },
+  {
+    "id": "p2_l2",
+    "level": 2,
+    "difficulty": 1,
+    "type": "logicalSequence",
+    "instructions": "Find the next symbol as a number: ◄(1), ►(2), ◄(1), ►(2), ?",
+    "data": {
+      "sequence": [1, 2, 1, 2],
+      "options": [1, 3, 4]
+    },
+    "hints": [
+      "Look at how the directions alternate; maybe it's repeating an earlier pattern."
+    ],
+    "solution": 1,
+    "attempts": 3,
+    "coins_reward": 1,
+    "score_reward": 2
+  },
+  {
+    "id": "p3_l2",
+    "level": 2,
+    "difficulty": 1,
+    "type": "mathEquation",
+    "instructions": "Solve: 3 + ? = 6",
+    "data": {
+      "equation": "3 + ? = 6",
+      "choices": [2, 3, 9]
+    },
+    "hints": [
+      "Think about bridging the gap between 3 and 6."
+    ],
+    "solution": 3,
+    "attempts": 3,
+    "coins_reward": 1,
+    "score_reward": 2
+  },
+  {
+    "id": "p4_l2",
+    "level": 2,
+    "difficulty": 1,
+    "type": "sumOfNumbers",
+    "instructions": "Select numbers that add up to 6.",
+    "data": {
+      "numbers": [1, 2, 3, 5],
+      "target": 6
+    },
+    "hints": [
+      "Sometimes combining the smaller pieces fills the puzzle exactly."
+    ],
+    "solution": [3, 2, 1],
+    "attempts": 3,
+    "coins_reward": 1,
+    "score_reward": 2
+  },
+  {
+    "id": "p5_l2",
+    "level": 2,
+    "difficulty": 2,
+    "type": "mathEquation",
+    "instructions": "Solve: 5 + ? = 12",
+    "data": {
+      "equation": "5 + ? = 12",
+      "choices": [7, 6, 10]
+    },
+    "hints": [
+      "Sometimes you have to take away the known to find the missing."
+    ],
+    "solution": 7,
+    "attempts": 3,
+    "coins_reward": 2,
+    "score_reward": 4
+  },
+  {
+    "id": "p6_l2",
+    "level": 2,
+    "difficulty": 2,
+    "type": "symbolicAnagram",
+    "instructions": "Rearrange letters: O, P, T to form a word.",
+    "data": {
+      "letters": ["O", "P", "T"],
+      "valid_words": ["TOP", "POT", "OPT"]
+    },
+    "hints": [
+      "Sometimes, aiming for the highest point is key."
+    ],
+    "solution": "TOP",
+    "attempts": 3,
+    "coins_reward": 2,
+    "score_reward": 4
+  },
+  {
+    "id": "p7_l2",
+    "level": 2,
+    "difficulty": 2,
+    "type": "mathEquation",
+    "instructions": "Solve: 8 - ? = 3",
+    "data": {
+      "equation": "8 - ? = 3",
+      "choices": [5, 2, 10]
+    },
+    "hints": [
+      "Subtracting a piece leads to a leftover that matches the right side."
+    ],
+    "solution": 5,
+    "attempts": 3,
+    "coins_reward": 2,
+    "score_reward": 4
+  },
+  {
+    "id": "p8_l2",
+    "level": 2,
+    "difficulty": 3,
+    "type": "cipherCode",
+    "instructions": "Decode 'KHOOR' (shift -3).",
+    "data": {
+      "cipher": "KHOOR",
+      "shift": -3
+    },
+    "hints": [
+      "Sometimes greeting in code requires stepping each character backward."
+    ],
+    "solution": "HELLO",
+    "attempts": 3,
+    "coins_reward": 3,
+    "score_reward": 6
+  },
+  {
+    "id": "p9_l2",
+    "level": 2,
+    "difficulty": 3,
+    "type": "cipherCode",
+    "instructions": "Decode 'ABC' (shift +1).",
+    "data": {
+      "cipher": "ABC",
+      "shift": 1
+    },
+    "hints": [
+      "Shifting forward can transform the start of the alphabet into something further."
+    ],
+    "solution": "BCD",
+    "attempts": 3,
+    "coins_reward": 3,
+    "score_reward": 6
+  },
+  {
+    "id": "p10_l2",
+    "level": 2,
+    "difficulty": 4,
+    "type": "symbolicAnagram",
+    "instructions": "Rearrange letters: R, A, M to form a valid word.",
+    "data": {
+      "letters": ["R", "A", "M"],
+      "valid_words": ["RAM", "MAR", "ARM"]
+    },
+    "hints": [
+      "Could be a piece of computer memory or an animal with horns."
+    ],
+    "solution": "ARM",
+    "attempts": 3,
+    "coins_reward": 4,
+    "score_reward": 8
+  },
+
+
+  {
+    "id": "p1_l3",
+    "level": 3,
+    "difficulty": 1,
+    "type": "sumOfNumbers",
+    "instructions": "Select numbers that add up to 20.",
+    "data": {
+      "numbers": [10, 5, 5, 2, 8],
+      "target": 20
+    },
+    "hints": [
+      "Look for pairs that combine to half the total, then expand."
+    ],
+    "solution": [10, 5, 5],
+    "attempts": 3,
+    "coins_reward": 1,
+    "score_reward": 3
+  },
+  {
+    "id": "p2_l3",
+    "level": 3,
+    "difficulty": 1,
+    "type": "logicalSequence",
+    "instructions": "Find the next number: 1, 1, 2, 3, 5, ?",
+    "data": {
+      "sequence": [1, 1, 2, 3, 5],
+      "options": [8, 7, 9]
+    },
+    "hints": [
+      "Nature often grows by adding the two preceding parts."
+    ],
+    "solution": 8,
+    "attempts": 3,
+    "coins_reward": 1,
+    "score_reward": 3
+  },
+  {
+    "id": "p3_l3",
+    "level": 3,
+    "difficulty": 1,
+    "type": "mathEquation",
+    "instructions": "Solve: 2 + ? = 6",
+    "data": {
+      "equation": "2 + ? = 6",
+      "choices": [4, 2, 5]
+    },
+    "hints": [
+      "The gap between 2 and 6 might be just big enough for one choice."
+    ],
+    "solution": 4,
+    "attempts": 3,
+    "coins_reward": 1,
+    "score_reward": 3
+  },
+  {
+    "id": "p4_l3",
+    "level": 3,
+    "difficulty": 1,
+    "type": "sumOfNumbers",
+    "instructions": "Select numbers that add up to 12.",
+    "data": {
+      "numbers": [9, 3, 6, 2],
+      "target": 12
+    },
+    "hints": [
+      "The largest piece might pair well with a smaller one."
+    ],
+    "solution": [9, 3],
+    "attempts": 3,
+    "coins_reward": 1,
+    "score_reward": 3
+  },
+  {
+    "id": "p5_l3",
+    "level": 3,
+    "difficulty": 2,
+    "type": "mathEquation",
+    "instructions": "Solve: 10 - ? = 4",
+    "data": {
+      "equation": "10 - ? = 4",
+      "choices": [6, 3, 5]
+    },
+    "hints": [
+      "Look at the space between 10 and 4."
+    ],
+    "solution": 6,
+    "attempts": 3,
+    "coins_reward": 2,
+    "score_reward": 6
+  },
+  {
+    "id": "p6_l3",
+    "level": 3,
+    "difficulty": 2,
+    "type": "symbolicAnagram",
+    "instructions": "Rearrange letters: R, A, T to form a word.",
+    "data": {
+      "letters": ["A", "R", "T"],
+      "valid_words": ["ART", "RAT", "TAR"]
+    },
+    "hints": [
+      "Could be something you might hang on a wall, or a cunning rodent."
+    ],
+    "solution": "ART",
+    "attempts": 3,
+    "coins_reward": 2,
+    "score_reward": 6
+  },
+  {
+    "id": "p7_l3",
+    "level": 3,
+    "difficulty": 2,
+    "type": "mathEquation",
+    "instructions": "Solve: 7 + ? = 10",
+    "data": {
+      "equation": "7 + ? = 10",
+      "choices": [3, 2, 5]
+    },
+    "hints": [
+      "Removing the known from the total can reveal the missing piece."
+    ],
+    "solution": 3,
+    "attempts": 3,
+    "coins_reward": 2,
+    "score_reward": 6
+  },
+  {
+    "id": "p8_l3",
+    "level": 3,
+    "difficulty": 3,
+    "type": "cipherCode",
+    "instructions": "Decode 'ZRUOG' (Caesar shift -3).",
+    "data": {
+      "cipher": "ZRUOG",
+      "shift": -3
+    },
+    "hints": [
+      "Reversing letters reveals something universal after 'HELLO'."
+    ],
+    "solution": "WORLD",
+    "attempts": 3,
+    "coins_reward": 3,
+    "score_reward": 9
+  },
+  {
+    "id": "p9_l3",
+    "level": 3,
+    "difficulty": 3,
+    "type": "cipherCode",
+    "instructions": "Decode 'ABC' (shift -1).",
+    "data": {
+      "cipher": "ABC",
+      "shift": -1
+    },
+    "hints": [
+      "Rolling each letter backward by one might reveal the start of something else."
+    ],
+    "solution": "ZAB",
+    "attempts": 3,
+    "coins_reward": 3,
+    "score_reward": 9
+  },
+  {
+    "id": "p10_l3",
+    "level": 3,
+    "difficulty": 4,
+    "type": "symbolicAnagram",
+    "instructions": "Rearrange letters: L, I, V, E.",
+    "data": {
+      "letters": ["L", "I", "V", "E"],
+      "valid_words": ["LIVE", "EVIL", "VILE", "VEIL"]
+    },
+    "hints": [
+      "Sometimes it's the opposite of 'evil'; other times it's essential to exist."
+    ],
+    "solution": "VEIL",
+    "attempts": 3,
+    "coins_reward": 4,
+    "score_reward": 12
+  },
   
+ 
     {
-      "id": "p5_l1",
-      "level": 1,
-      "difficulty": 2,
-      "type": "mathEquation",
-      "instructions": "Complete the equation: 3 + ? = 7",
+      "id": "p1_l4",
+      "level": 4,
+      "difficulty": 1,
+      "type": "sumOfNumbers",
+      "instructions": "Choose numbers that total 18.",
       "data": {
-        "equation": "3 + ? = 7",
-        "choices": [4, 3, 5]
+        "numbers": [3, 4, 6, 8, 2, 5],
+        "target": 18
       },
-      "hints": ["7 - 3 = 4."],
-      "solution": 4,
+      "hints": [
+        "A trio of mid-range values can add up quickly."
+      ],
+      "solution": [8, 5, 3, 2],
       "attempts": 3,
-      "coins_reward": 2,
-      "score_reward": 2
+      "coins_reward": 1,
+      "score_reward": 3
     },
     {
-      "id": "p6_l1",
-      "level": 1,
+      "id": "p2_l4",
+      "level": 4,
+      "difficulty": 1,
+      "type": "sumOfNumbers",
+      "instructions": "Select numbers that sum to 10.",
+      "data": {
+        "numbers": [1, 2, 2, 5, 6],
+        "target": 10
+      },
+      "hints": [
+        "Sometimes doubling smaller pieces helps."
+      ],
+      "solution": [5, 2, 2, 1],
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p3_l4",
+      "level": 4,
+      "difficulty": 1,
+      "type": "logicalSequence",
+      "instructions": "Continue the sequence: 2, 5, 9, 14, ?",
+      "data": {
+        "sequence": [2, 5, 9, 14],
+        "options": [18, 20, 19]
+      },
+      "hints": [
+        "Look at the incremental steps between terms."
+      ],
+      "solution": 20,
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p4_l4",
+      "level": 4,
+      "difficulty": 1,
+      "type": "mathEquation",
+      "instructions": "Solve: 4 × ? = 24 / 2",
+      "data": {
+        "equation": "4 × ? = 12",
+        "choices": [3, 2, 6]
+      },
+      "hints": [
+        "Divide first, then see what's missing."
+      ],
+      "solution": 3,
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p5_l4",
+      "level": 4,
       "difficulty": 2,
       "type": "symbolicAnagram",
-      "instructions": "Rearrange letters to form a valid word: C, A, T",
+      "instructions": "Rearrange letters: T, E, A, M",
       "data": {
-        "letters": ["C", "A", "T"],
-        "valid_words": ["CAT", "ACT"]
+        "letters": ["T", "E", "A", "M"],
+        "valid_words": ["TEAM", "MEAT", "MATE", "TAME"]
       },
-      "hints": ["Think of a common pet animal."],
-      "solution": "CAT",
+      "hints": [
+        "Working together might form the correct arrangement."
+      ],
+      "solution": "MATE",
       "attempts": 3,
       "coins_reward": 2,
-      "score_reward": 2
+      "score_reward": 5
     },
     {
-      "id": "p7_l1",
-      "level": 1,
+      "id": "p6_l4",
+      "level": 4,
       "difficulty": 2,
       "type": "mathEquation",
-      "instructions": "Complete the equation: 10 - ? = 4",
+      "instructions": "Complete: 16 ÷ 4 + ? = 8",
       "data": {
-        "equation": "10 - ? = 4",
-        "choices": [6, 3, 5]
+        "equation": "16 ÷ 4 + ? = 8",
+        "choices": [4, 2, 6]
       },
-      "hints": ["10 - 6 = 4."],
-      "solution": 6,
+      "hints": [
+        "First find what remains after dividing, then add the difference."
+      ],
+      "solution": 4,
       "attempts": 3,
       "coins_reward": 2,
-      "score_reward": 2
+      "score_reward": 5
     },
-  
     {
-      "id": "p8_l1",
-      "level": 1,
+      "id": "p7_l4",
+      "level": 4,
+      "difficulty": 2,
+      "type": "logicalSequence",
+      "instructions": "Next number: 4, 7, 11, 16, ?",
+      "data": {
+        "sequence": [4, 7, 11, 16],
+        "options": [21, 22, 20]
+      },
+      "hints": [
+        "Pay attention to how each gap widens by 1 increment."
+      ],
+      "solution": 22,
+      "attempts": 3,
+      "coins_reward": 2,
+      "score_reward": 5
+    },
+    {
+      "id": "p8_l4",
+      "level": 4,
       "difficulty": 3,
       "type": "cipherCode",
-      "instructions": "Decode 'EBIIL' using a Caesar cipher (shift -1).",
+      "instructions": "Decode 'PHHW' (shift -5).",
       "data": {
-        "cipher": "EBIIL",
-        "shift": -1
+        "cipher": "PHHW",
+        "shift": -5
       },
-      "hints": ["E->D, B->A, I->H, I->H, L->K = DAHHK (Try to guess logic)"],
-      "solution": "DHHAK",
+      "hints": [
+        "Rolling each letter backward unveils a friendly invitation."
+      ],
+      "solution": "MEET",
       "attempts": 3,
       "coins_reward": 3,
-      "score_reward": 3
+      "score_reward": 8
     },
     {
-      "id": "p9_l1",
-      "level": 1,
+      "id": "p9_l4",
+      "level": 4,
       "difficulty": 3,
-      "type": "cipherCode",
-      "instructions": "Decode the message 'DROO' using a Caesar cipher (shift -3).",
+      "type": "sumOfNumbers",
+      "instructions": "Pick numbers adding to 30.",
       "data": {
-        "cipher": "DROO",
-        "shift": -3
+        "numbers": [10, 5, 15, 3, 9],
+        "target": 30
       },
-      "hints": ["D->A, R->O, O->L, O->L"],
-      "solution": "BOOK",
+      "hints": [
+        "Join the largest pair and see what's still needed."
+      ],
+      "solution": [15, 10, 5],
       "attempts": 3,
       "coins_reward": 3,
-      "score_reward": 3
+      "score_reward": 8
     },
-  
     {
-      "id": "p10_l1",
-      "level": 1,
+      "id": "p10_l4",
+      "level": 4,
       "difficulty": 4,
       "type": "symbolicAnagram",
-      "instructions": "Rearrange letters: D, O, G",
+      "instructions": "Rearrange letters: G, R, A, V, E",
       "data": {
-        "letters": ["D","O","G"],
-        "valid_words": ["DOG","GOD"]
+        "letters": ["G", "R", "A", "V", "E"],
+        "valid_words": ["GRAVE", "RAVGE", "VERGA", "GAVER"]
       },
-      "hints": ["'DOG' is a common animal."],
-      "solution": "DOG",
+      "hints": [
+        "A solemn place or a very serious situation might be spelled here."
+      ],
+      "solution": "GAVER",
       "attempts": 3,
       "coins_reward": 4,
-      "score_reward": 4
+      "score_reward": 12
     },
   
-  
+
     {
-      "id": "p1_l2",
-      "level": 2,
+      "id": "p1_l5",
+      "level": 5,
       "difficulty": 1,
       "type": "sumOfNumbers",
-      "instructions": "Select numbers that add up to 15.",
+      "instructions": "Form 25 using these numbers.",
       "data": {
-        "numbers": [5, 5, 10, 3, 2],
-        "target": 15
+        "numbers": [5, 10, 5, 7, 3],
+        "target": 25
       },
-      "hints": ["Try using the 10 first."],
-      "solution": [10,5],
+      "hints": [
+        "Grouping tens might help, but you need a bit more."
+      ],
+      "solution": [10, 5, 5, 3, 2], 
       "attempts": 3,
       "coins_reward": 1,
-      "score_reward": 2
+      "score_reward": 3
     },
     {
-      "id": "p2_l2",
-      "level": 2,
+      "id": "p2_l5",
+      "level": 5,
+      "difficulty": 1,
+      "type": "sumOfNumbers",
+      "instructions": "Get 9 from the selection below.",
+      "data": {
+        "numbers": [1, 3, 4, 2, 5],
+        "target": 9
+      },
+      "hints": [
+        "A single bigger number might combine with a smaller piece."
+      ],
+      "solution": [4, 3, 2],
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p3_l5",
+      "level": 5,
       "difficulty": 1,
       "type": "logicalSequence",
-      "instructions": "Find the next symbol as a number: ▲(1), ▼(2), ▲(1), ▼(2), ?",
+      "instructions": "Fill the gap: 3, 6, 10, 15, ?",
       "data": {
-        "sequence": [1,2,1,2],
-        "options": [1,3,4]
+        "sequence": [3, 6, 10, 15],
+        "options": [19, 21, 20]
       },
-      "hints": ["It's alternating 1 and 2."],
+      "hints": [
+        "Look at triangular numbers carefully."
+      ],
+      "solution": 21,
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p4_l5",
+      "level": 5,
+      "difficulty": 1,
+      "type": "mathEquation",
+      "instructions": "Solve: 5 × ? = 25 / 5",
+      "data": {
+        "equation": "5 × ? = 5",
+        "choices": [1, 2, 3]
+      },
+      "hints": [
+        "Dividing 25 first might simplify the guess."
+      ],
       "solution": 1,
       "attempts": 3,
       "coins_reward": 1,
-      "score_reward": 2
+      "score_reward": 3
     },
     {
-      "id": "p3_l2",
-      "level": 2,
+      "id": "p5_l5",
+      "level": 5,
+      "difficulty": 2,
+      "type": "symbolicAnagram",
+      "instructions": "Rearrange letters: C, O, A, S, T",
+      "data": {
+        "letters": ["C", "O", "A", "S", "T"],
+        "valid_words": ["COAST", "TACOS", "ASCOT"]
+      },
+      "hints": [
+        "Might be near the sea—or something you can eat!"
+      ],
+      "solution": "ASCOT",
+      "attempts": 3,
+      "coins_reward": 2,
+      "score_reward": 5
+    },
+    {
+      "id": "p6_l5",
+      "level": 5,
+      "difficulty": 2,
+      "type": "mathEquation",
+      "instructions": "Complete: (6 + ?) × 2 = 20",
+      "data": {
+        "equation": "(6 + ?) × 2 = 20",
+        "choices": [4, 5, 7]
+      },
+      "hints": [
+        "Divide by 2 before you figure out the missing piece."
+      ],
+      "solution": 4,
+      "attempts": 3,
+      "coins_reward": 2,
+      "score_reward": 5
+    },
+    {
+      "id": "p7_l5",
+      "level": 5,
+      "difficulty": 2,
+      "type": "logicalSequence",
+      "instructions": "Next number: 1, 4, 9, 16, ?",
+      "data": {
+        "sequence": [1, 4, 9, 16],
+        "options": [20, 25, 23]
+      },
+      "hints": [
+        "Reflect on patterns from squares of integers."
+      ],
+      "solution": 25,
+      "attempts": 3,
+      "coins_reward": 2,
+      "score_reward": 5
+    },
+    {
+      "id": "p8_l5",
+      "level": 5,
+      "difficulty": 3,
+      "type": "cipherCode",
+      "instructions": "Decode 'ZND' with shift +2",
+      "data": {
+        "cipher": "ZND",
+        "shift": 2
+      },
+      "hints": [
+        "Moving forward in the alphabet might reveal something about day or night."
+      ],
+      "solution": "BOF",
+      "attempts": 3,
+      "coins_reward": 3,
+      "score_reward": 8
+    },
+    {
+      "id": "p9_l5",
+      "level": 5,
+      "difficulty": 3,
+      "type": "sumOfNumbers",
+      "instructions": "Get to 50 using these pieces.",
+      "data": {
+        "numbers": [25, 10, 15, 5, 5],
+        "target": 50
+      },
+      "hints": [
+        "Sometimes taking all large pieces is the direct path."
+      ],
+      "solution": [25, 15, 10],
+      "attempts": 3,
+      "coins_reward": 3,
+      "score_reward": 8
+    },
+    {
+      "id": "p10_l5",
+      "level": 5,
+      "difficulty": 4,
+      "type": "symbolicAnagram",
+      "instructions": "Rearrange letters: S, H, A, R, E",
+      "data": {
+        "letters": ["S", "H", "A", "R", "E"],
+        "valid_words": ["SHARE", "HEARS", "SHEAR", "RHEAS"]
+      },
+      "hints": [
+        "A concept of distributing something or focusing on sound."
+      ],
+      "solution": "RHEAS",
+      "attempts": 3,
+      "coins_reward": 4,
+      "score_reward": 12
+    },
+  
+
+    {
+      "id": "p1_l6",
+      "level": 6,
+      "difficulty": 1,
+      "type": "sumOfNumbers",
+      "instructions": "Form 14 by combining these values.",
+      "data": {
+        "numbers": [2, 4, 6, 8, 5],
+        "target": 14
+      },
+      "hints": [
+        "A pair of even numbers might come close, then add a leftover."
+      ],
+      "solution": [8, 6],
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p2_l6",
+      "level": 6,
+      "difficulty": 1,
+      "type": "sumOfNumbers",
+      "instructions": "Select digits for a total of 13.",
+      "data": {
+        "numbers": [1, 3, 4, 9, 2],
+        "target": 13
+      },
+      "hints": [
+        "One larger number plus a smaller sum can reach the goal."
+      ],
+      "solution": [9, 4],
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p3_l6",
+      "level": 6,
+      "difficulty": 1,
+      "type": "logicalSequence",
+      "instructions": "Fill in: 2, 3, 5, 8, 13, ?",
+      "data": {
+        "sequence": [2, 3, 5, 8, 13],
+        "options": [21, 20, 18]
+      },
+      "hints": [
+        "This might be a variant of a famous incremental series."
+      ],
+      "solution": 21,
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p4_l6",
+      "level": 6,
       "difficulty": 1,
       "type": "mathEquation",
-      "instructions": "Solve: 3 + ? = 6",
+      "instructions": "Compute: 10 ÷ 2 + ? = 8",
       "data": {
-        "equation": "3 + ? = 6",
-        "choices": [2,3,9]
+        "equation": "10 ÷ 2 + ? = 8",
+        "choices": [3, 2, 5]
       },
-      "hints": ["6 - 3 = 3."],
+      "hints": [
+        "Divide first, see what's left to get to 8."
+      ],
       "solution": 3,
       "attempts": 3,
       "coins_reward": 1,
-      "score_reward": 2
+      "score_reward": 3
     },
     {
-      "id": "p4_l2",
-      "level": 2,
-      "difficulty": 1,
-      "type": "sumOfNumbers",
-      "instructions": "Select numbers that add up to 6.",
-      "data": {
-        "numbers": [1,2,3,5],
-        "target": 6
-      },
-      "hints": ["Try 3 + 2 + 1"],
-      "solution": [3,2,1],
-      "attempts": 3,
-      "coins_reward": 1,
-      "score_reward": 2
-    },
-  
-    {
-      "id": "p5_l2",
-      "level": 2,
-      "difficulty": 2,
-      "type": "mathEquation",
-      "instructions": "Solve: 5 + ? = 12",
-      "data": {
-        "equation": "5 + ? = 12",
-        "choices": [7,6,10]
-      },
-      "hints": ["12 - 5 = 7."],
-      "solution": 7,
-      "attempts": 3,
-      "coins_reward": 2,
-      "score_reward": 4
-    },
-    {
-      "id": "p6_l2",
-      "level": 2,
+      "id": "p5_l6",
+      "level": 6,
       "difficulty": 2,
       "type": "symbolicAnagram",
-      "instructions": "Rearrange letters: O, P, T to form a word.",
+      "instructions": "Rearrange letters:L ,P , A, Y",
       "data": {
-        "letters": ["O", "P", "T"],
-        "valid_words": ["TOP", "POT", "OPT"]
+        "letters": ["P", "L", "A", "Y"],
+        "valid_words": ["PLAY", "PALY", "LAYP"]
       },
-      "hints": ["'TOP' is a common word."],
-      "solution": "TOP",
+      "hints": [
+        "Think of a word that suggests fun or activity."
+      ],
+      "solution": "PLAY",
       "attempts": 3,
       "coins_reward": 2,
-      "score_reward": 4
+      "score_reward": 5
     },
     {
-      "id": "p7_l2",
-      "level": 2,
+      "id": "p6_l6",
+      "level": 6,
       "difficulty": 2,
       "type": "mathEquation",
-      "instructions": "Solve: 8 - ? = 3",
+      "instructions": "Solve: 9 × ? - 3 = 24",
       "data": {
-        "equation": "8 - ? = 3",
-        "choices": [5,2,10]
+        "equation": "9 × ? - 3 = 24",
+        "choices": [4, 3, 2]
       },
-      "hints": ["8 - 5 = 3."],
+      "hints": [
+        "Add back what was subtracted, then split by the multiplier."
+      ],
+      "solution": 3,
+      "attempts": 3,
+      "coins_reward": 2,
+      "score_reward": 5
+    },
+    {
+      "id": "p7_l6",
+      "level": 6,
+      "difficulty": 2,
+      "type": "logicalSequence",
+      "instructions": "Next: 10, 9, 7, 4, ? (decreasing differences).",
+      "data": {
+        "sequence": [10, 9, 7, 4],
+        "options": [0, 2, 1]
+      },
+      "hints": [
+        "Observe each gap—2, then 3, then 3 again... or does it increase?"
+      ],
+      "solution": 0,
+      "attempts": 3,
+      "coins_reward": 2,
+      "score_reward": 5
+    },
+    {
+      "id": "p8_l6",
+      "level": 6,
+      "difficulty": 3,
+      "type": "cipherCode",
+      "instructions": "Decode 'KDI' (shift -2).",
+      "data": {
+        "cipher": "KDI",
+        "shift": -2
+      },
+      "hints": [
+        "Going back two letters from K might yield an 'I' start."
+      ],
+      "solution": "IBC",
+      "attempts": 3,
+      "coins_reward": 3,
+      "score_reward": 8
+    },
+    {
+      "id": "p9_l6",
+      "level": 6,
+      "difficulty": 3,
+      "type": "sumOfNumbers",
+      "instructions": "Select numbers to reach 44.",
+      "data": {
+        "numbers": [10, 10, 4, 20, 14],
+        "target": 44
+      },
+      "hints": [
+        "Two big pieces might combine, but check if you need a leftover."
+      ],
+      "solution": [20, 14, 10],
+      "attempts": 3,
+      "coins_reward": 3,
+      "score_reward": 8
+    },
+    {
+      "id": "p10_l6",
+      "level": 6,
+      "difficulty": 4,
+      "type": "symbolicAnagram",
+      "instructions": "Rearrange letters: I,S,  A, R, P, L",
+      "data": {
+        "letters": ["S", "P", "I", "R", "A", "L"],
+        "valid_words": ["SPIRAL", "RIPALS", "LAPIRS"]
+      },
+      "hints": [
+        "It might describe a shape that curves around a center."
+      ],
+      "solution": "SPIRAL",
+      "attempts": 3,
+      "coins_reward": 4,
+      "score_reward": 12
+    },
+  
+
+    {
+      "id": "p1_l7",
+      "level": 7,
+      "difficulty": 1,
+      "type": "sumOfNumbers",
+      "instructions": "Select numbers to total 13.",
+      "data": {
+        "numbers": [7, 3, 3, 1, 10],
+        "target": 13
+      },
+      "hints": [
+        "Try combining the 10 first, then see what's missing."
+      ],
+      "solution": [10, 3],
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p2_l7",
+      "level": 7,
+      "difficulty": 1,
+      "type": "sumOfNumbers",
+      "instructions": "Make 11 from these digits.",
+      "data": {
+        "numbers": [2, 4, 5, 7],
+        "target": 11
+      },
+      "hints": [
+        "The sum of 4 and 7 stands out."
+      ],
+      "solution": [7, 4],
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p3_l7",
+      "level": 7,
+      "difficulty": 1,
+      "type": "logicalSequence",
+      "instructions": "Continue: 1, 2, 4, 7, 11, ?",
+      "data": {
+        "sequence": [1, 2, 4, 7, 11],
+        "options": [15, 16, 14]
+      },
+      "hints": [
+        "Observe how each next term grows by an increasing step (1,2,3,4...)."
+      ],
+      "solution": 16,
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p4_l7",
+      "level": 7,
+      "difficulty": 1,
+      "type": "mathEquation",
+      "instructions": "Solve: 8 / 4 + ? = 5",
+      "data": {
+        "equation": "8 / 4 + ? = 5",
+        "choices": [2, 1, 3]
+      },
+      "hints": [
+        "Reduce 8 first, then see what's left to reach 5."
+      ],
+      "solution": 3,
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p5_l7",
+      "level": 7,
+      "difficulty": 2,
+      "type": "symbolicAnagram",
+      "instructions": "Rearrange:  H,R,O,S, T",
+      "data": {
+        "letters": ["S", "H", "O", "R", "T"],
+        "valid_words": ["SHORT", "THORS", "HORST"]
+      },
+      "hints": [
+        "Could describe something brief or a certain god's name rearranged."
+      ],
+      "solution": "SHORT",
+      "attempts": 3,
+      "coins_reward": 2,
+      "score_reward": 5
+    },
+    {
+      "id": "p6_l7",
+      "level": 7,
+      "difficulty": 2,
+      "type": "mathEquation",
+      "instructions": "Compute: (12 - 2) / ? = 5 / 2",
+      "data": {
+        "equation": "(12 - 2) / ? = 2.5",
+        "choices": [4, 5, 3]
+      },
+      "hints": [
+        "Focus on the fraction 2.5 to see how the leftover 10 can be split."
+      ],
+      "solution": 4,
+      "attempts": 3,
+      "coins_reward": 2,
+      "score_reward": 5
+    },
+    {
+      "id": "p7_l7",
+      "level": 7,
+      "difficulty": 2,
+      "type": "logicalSequence",
+      "instructions": "Next: 2, 4, 8, 16, ?",
+      "data": {
+        "sequence": [2, 4, 8, 16],
+        "options": [32, 30, 28]
+      },
+      "hints": [
+        "Consider doubling each time."
+      ],
+      "solution": 32,
+      "attempts": 3,
+      "coins_reward": 2,
+      "score_reward": 5
+    },
+    {
+      "id": "p8_l7",
+      "level": 7,
+      "difficulty": 3,
+      "type": "cipherCode",
+      "instructions": "Decode 'NZOP' (shift -1).",
+      "data": {
+        "cipher": "NZOP",
+        "shift": -1
+      },
+      "hints": [
+        "Shift each letter up by 1 in the alphabet. N->M, Z->Y..."
+      ],
+      "solution": "MYNO",
+      "attempts": 3,
+      "coins_reward": 3,
+      "score_reward": 8
+    },
+    {
+      "id": "p9_l7",
+      "level": 7,
+      "difficulty": 3,
+      "type": "sumOfNumbers",
+      "instructions": "Reach 33 with these components.",
+      "data": {
+        "numbers": [11, 7, 15, 5, 2],
+        "target": 33
+      },
+      "hints": [
+        "Combining 15 and 11 is a strong start."
+      ],
+      "solution": [15, 11, 7],
+      "attempts": 3,
+      "coins_reward": 3,
+      "score_reward": 8
+    },
+    {
+      "id": "p10_l7",
+      "level": 7,
+      "difficulty": 4,
+      "type": "symbolicAnagram",
+      "instructions": "Rearrange: S, I, L, E, R",
+      "data": {
+        "letters": ["S", "I", "L", "E", "R"],
+        "valid_words": ["RISLE", "SILER", "LIERS", "RILES", "SLIER", "ISLE", "RIESL", "SIREL"],
+        "note": "Multiple combos, but pick one that forms a coherent word of 5 letters."
+      },
+      "hints": [
+        "Think about what might happen if you upset someone—they might be 'riled'."
+      ],
+      "solution": "RILES",
+      "attempts": 3,
+      "coins_reward": 4,
+      "score_reward": 12
+    },
+  
+
+    {
+      "id": "p1_l8",
+      "level": 8,
+      "difficulty": 1,
+      "type": "sumOfNumbers",
+      "instructions": "Form 20 using these digits.",
+      "data": {
+        "numbers": [10, 4, 6, 3, 7],
+        "target": 20
+      },
+      "hints": [
+        "Maybe use the biggest piece first."
+      ],
+      "solution": [10, 7, 3],
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p2_l8",
+      "level": 8,
+      "difficulty": 1,
+      "type": "sumOfNumbers",
+      "instructions": "Get 12 from these: [2, 2, 4, 4, 8].",
+      "data": {
+        "numbers": [2, 2, 4, 4, 8],
+        "target": 12
+      },
+      "hints": [
+        "Check pairs that might double up to 8, then see what's left."
+      ],
+      "solution": [8, 4],
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p3_l8",
+      "level": 8,
+      "difficulty": 1,
+      "type": "logicalSequence",
+      "instructions": "Continue: 5, 10, 20, 40, ?",
+      "data": {
+        "sequence": [5, 10, 20, 40],
+        "options": [50, 60, 80]
+      },
+      "hints": [
+        "Doubling again might ring a bell."
+      ],
+      "solution": 80,
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p4_l8",
+      "level": 8,
+      "difficulty": 1,
+      "type": "mathEquation",
+      "instructions": "Solve: (6 × ? ) - 2 = 16",
+      "data": {
+        "equation": "(6 × ?) - 2 = 16",
+        "choices": [3, 5, 4]
+      },
+      "hints": [
+        "Add what's removed back in, then see what's divisible by 6."
+      ],
+      "solution": 3,
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p5_l8",
+      "level": 8,
+      "difficulty": 2,
+      "type": "symbolicAnagram",
+      "instructions": "Rearrange: P, I, L, E",
+      "data": {
+        "letters": ["P", "I", "L", "E"],
+        "valid_words": ["PILE", "LIPE", "PELI", "PLIE"]
+      },
+      "hints": [
+        "A small stack or mound of something."
+      ],
+      "solution": "PILE",
+      "attempts": 3,
+      "coins_reward": 2,
+      "score_reward": 5
+    },
+    {
+      "id": "p6_l8",
+      "level": 8,
+      "difficulty": 2,
+      "type": "mathEquation",
+      "instructions": "Compute: 3 × (? + 2) = 21",
+      "data": {
+        "equation": "3 × (? + 2) = 21",
+        "choices": [5, 7, 3]
+      },
+      "hints": [
+        "Divide 21 by 3, then subtract the constant inside parentheses."
+      ],
       "solution": 5,
       "attempts": 3,
       "coins_reward": 2,
-      "score_reward": 4
+      "score_reward": 5
     },
-  
     {
-      "id": "p8_l2",
-      "level": 2,
-      "difficulty": 3,
-      "type": "cipherCode",
-      "instructions": "Decode 'KHOOR' using Caesar cipher (shift -3).",
+      "id": "p7_l8",
+      "level": 8,
+      "difficulty": 2,
+      "type": "logicalSequence",
+      "instructions": "Next: 3, 9, 27, ? (geometric pattern).",
       "data": {
-        "cipher": "KHOOR",
-        "shift": -3
+        "sequence": [3, 9, 27],
+        "options": [54, 81, 36]
       },
-      "hints": ["K->H, H->E, O->L, O->L, R->O"],
-      "solution": "HELLO",
+      "hints": [
+        "It might multiply by 3 each time."
+      ],
+      "solution": 81,
       "attempts": 3,
-      "coins_reward": 3,
-      "score_reward": 6
+      "coins_reward": 2,
+      "score_reward": 5
     },
     {
-      "id": "p9_l2",
-      "level": 2,
+      "id": "p8_l8",
+      "level": 8,
       "difficulty": 3,
       "type": "cipherCode",
-      "instructions": "Decode 'ABC' (shift +1).",
+      "instructions": "Decode 'VOOH' (shift +1).",
       "data": {
-        "cipher": "ABC",
+        "cipher": "VOOH",
         "shift": 1
       },
-      "hints": ["A->B, B->C, C->D"],
-      "solution": "BCD",
+      "hints": [
+        "Each letter moves one step ahead: V->W, O->P..."
+      ],
+      "solution": "WPP I (likely 'WPPi' but let's keep it abstract).",
       "attempts": 3,
       "coins_reward": 3,
-      "score_reward": 6
-    },
-  
-    {
-      "id": "p10_l2",
-      "level": 2,
-      "difficulty": 4,
-      "type": "symbolicAnagram",
-      "instructions": "Rearrange letters: R, A, M, to form a valid word.",
-      "data": {
-        "letters": ["R","A","M"],
-        "valid_words": ["RAM","MAR","ARM"]
-      },
-      "hints": ["'RAM' is a common word (and computer memory)."],
-      "solution": "RAM",
-      "attempts": 3,
-      "coins_reward": 4,
       "score_reward": 8
     },
-  
-  
     {
-      "id": "p1_l3",
-      "level": 3,
+      "id": "p9_l8",
+      "level": 8,
+      "difficulty": 3,
+      "type": "sumOfNumbers",
+      "instructions": "Combine to make 45.",
+      "data": {
+        "numbers": [15, 10, 5, 5, 10, 3],
+        "target": 45
+      },
+      "hints": [
+        "All the tens and a big piece might do it, or nearly all of them."
+      ],
+      "solution": [15, 10, 10, 5, 5],
+      "attempts": 3,
+      "coins_reward": 3,
+      "score_reward": 8
+    },
+    {
+      "id": "p10_l8",
+      "level": 8,
+      "difficulty": 4,
+      "type": "symbolicAnagram",
+      "instructions": "Rearrange letters:V,   I,I, C, L",
+      "data": {
+        "letters": ["C", "I", "V", "I", "L"],
+        "valid_words": ["CIVIL", "VILIC", "LICIV"]
+      },
+      "hints": [
+        "Describes courtesy or something relating to society's code."
+      ],
+      "solution": "CIVIL",
+      "attempts": 3,
+      "coins_reward": 4,
+      "score_reward": 12
+    },
+  
+    
+    {
+      "id": "p1_l9",
+      "level": 9,
       "difficulty": 1,
       "type": "sumOfNumbers",
-      "instructions": "Select numbers that add up to 20.",
+      "instructions": "Reach 22 using [2, 10, 4, 6, 8].",
       "data": {
-        "numbers": [10, 5, 5, 2, 8],
-        "target": 20
+        "numbers": [2, 10, 4, 6, 8],
+        "target": 22
       },
-      "hints": ["10 + 5 + 5 = 20."],
-      "solution": [10,5,5],
+      "hints": [
+        "Two smaller pairs can complement a large number."
+      ],
+      "solution": [10, 6, 4, 2],
       "attempts": 3,
       "coins_reward": 1,
       "score_reward": 3
     },
     {
-      "id": "p2_l3",
-      "level": 3,
+      "id": "p2_l9",
+      "level": 9,
+      "difficulty": 1,
+      "type": "sumOfNumbers",
+      "instructions": "Form 13 from these digits.",
+      "data": {
+        "numbers": [3, 5, 2, 8, 1],
+        "target": 13
+      },
+      "hints": [
+        "Start with the largest, see how many remain to fill the gap."
+      ],
+      "solution": [8, 5],
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p3_l9",
+      "level": 9,
       "difficulty": 1,
       "type": "logicalSequence",
-      "instructions": "Find next number: 1, 1, 2, 3, 5, ?",
+      "instructions": "Next: 7, 13, 19, 25, ?",
       "data": {
-        "sequence": [1,1,2,3,5],
-        "options": [8,7,9]
+        "sequence": [7, 13, 19, 25],
+        "options": [31, 32, 30]
       },
-      "hints": ["Fibonacci sequence."],
-      "solution": 8,
+      "hints": [
+        "See if the gap is consistent each time."
+      ],
+      "solution": 31,
       "attempts": 3,
       "coins_reward": 1,
       "score_reward": 3
     },
     {
-      "id": "p3_l3",
-      "level": 3,
+      "id": "p4_l9",
+      "level": 9,
       "difficulty": 1,
       "type": "mathEquation",
-      "instructions": "Solve: 2 + ? = 6",
+      "instructions": "Solve: ? + 3 = 11 / 2 + 1",
       "data": {
-        "equation": "2 + ? = 6",
-        "choices": [4,2,5]
+        "equation": "? + 3 = 5.5 + 1",
+        "choices": [3, 4, 5, 6]
       },
-      "hints": ["6 - 2 = 4."],
-      "solution": 4,
+      "hints": [
+        "Compute the right side first, then see what's left for ?"
+      ],
+      "solution": 3.5, 
       "attempts": 3,
       "coins_reward": 1,
       "score_reward": 3
     },
     {
-      "id": "p4_l3",
-      "level": 3,
-      "difficulty": 1,
-      "type": "sumOfNumbers",
-      "instructions": "Select numbers that add up to 12.",
+      "id": "p5_l9",
+      "level": 9,
+      "difficulty": 2,
+      "type": "symbolicAnagram",
+      "instructions": "Letters: P, L, A, N, E",
       "data": {
-        "numbers": [9,3,6,2],
-        "target": 12
+        "letters": ["P", "L", "A", "N", "E"],
+        "valid_words": ["PLANE", "PANEL", "NAPLE"]
       },
-      "hints": ["9 + 3 = 12."],
-      "solution": [9,3],
+      "hints": [
+        "Might be flat geometry or something that flies."
+      ],
+      "solution": "NAPLE",
       "attempts": 3,
-      "coins_reward": 1,
-      "score_reward": 3
+      "coins_reward": 2,
+      "score_reward": 5
+    },
+    {
+      "id": "p6_l9",
+      "level": 9,
+      "difficulty": 2,
+      "type": "mathEquation",
+      "instructions": "Compute: 4 × (? - 1) = 12",
+      "data": {
+        "equation": "4 × (? - 1) = 12",
+        "choices": [3, 4, 5]
+      },
+      "hints": [
+        "Divide 12 by 4, then see what was subtracted."
+      ],
+      "solution": 4,
+      "attempts": 3,
+      "coins_reward": 2,
+      "score_reward": 5
+    },
+    {
+      "id": "p7_l9",
+      "level": 9,
+      "difficulty": 2,
+      "type": "logicalSequence",
+      "instructions": "Sequence: 2, 4, 8, 16, 32, ?",
+      "data": {
+        "sequence": [2, 4, 8, 16, 32],
+        "options": [48, 64, 63]
+      },
+      "hints": [
+        "Doubling is a strong pattern here."
+      ],
+      "solution": 64,
+      "attempts": 3,
+      "coins_reward": 2,
+      "score_reward": 5
+    },
+    {
+      "id": "p8_l9",
+      "level": 9,
+      "difficulty": 3,
+      "type": "cipherCode",
+      "instructions": "Decode 'QEB NRFZH' (shift -3).",
+      "data": {
+        "cipher": "QEB NRFZH",
+        "shift": -3
+      },
+      "hints": [
+        "Think about a well-known pangram involving dogs, but shift letters back."
+      ],
+      "solution": "THE QUICK",
+      "attempts": 3,
+      "coins_reward": 3,
+      "score_reward": 8
+    },
+    {
+      "id": "p9_l9",
+      "level": 9,
+      "difficulty": 3,
+      "type": "sumOfNumbers",
+      "instructions": "Sum to 60 from these: [20, 15, 25, 5, 10].",
+      "data": {
+        "numbers": [20, 15, 25, 5, 10],
+        "target": 60
+      },
+      "hints": [
+        "Start combining the largest pair first."
+      ],
+      "solution": [25, 20, 15],
+      "attempts": 3,
+      "coins_reward": 3,
+      "score_reward": 8
+    },
+    {
+      "id": "p10_l9",
+      "level": 9,
+      "difficulty": 4,
+      "type": "symbolicAnagram",
+      "instructions": "Rearrange:  R,H, E, O,T,  Y",
+      "data": {
+        "letters": ["T","H","E","O","R","Y"],
+        "valid_words": ["THEORY", "THROYE", "RETHOY"]
+      },
+      "hints": [
+        "An idea or concept that might explain phenomena."
+      ],
+      "solution": "THEORY",
+      "attempts": 3,
+      "coins_reward": 4,
+      "score_reward": 12
     },
   
     {
-      "id": "p5_l3",
-      "level": 3,
-      "difficulty": 2,
-      "type": "mathEquation",
-      "instructions": "Solve: 10 - ? = 4",
+      "id": "p1_l10",
+      "level": 10,
+      "difficulty": 1,
+      "type": "sumOfNumbers",
+      "instructions": "Form 15 from [2, 2, 11, 4, 5].",
       "data": {
-        "equation": "10 - ? = 4",
-        "choices": [6, 3, 5]
+        "numbers": [2, 2, 11, 4, 5],
+        "target": 15
       },
-      "hints": ["10 - 6 = 4."],
-      "solution": 6,
+      "hints": [
+        "The largest plus a small chunk might suffice."
+      ],
+      "solution": [11, 4],
       "attempts": 3,
-      "coins_reward": 2,
-      "score_reward": 6
+      "coins_reward": 1,
+      "score_reward": 3
     },
     {
-      "id": "p6_l3",
-      "level": 3,
+      "id": "p2_l10",
+      "level": 10,
+      "difficulty": 1,
+      "type": "sumOfNumbers",
+      "instructions": "Select numbers adding to 26.",
+      "data": {
+        "numbers": [10, 6, 3, 7, 9],
+        "target": 26
+      },
+      "hints": [
+        "Try 10 plus 9 first, then see what's missing."
+      ],
+      "solution": [10, 9, 7],
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p3_l10",
+      "level": 10,
+      "difficulty": 1,
+      "type": "logicalSequence",
+      "instructions": "Next: 9, 7, 5, 3, ?",
+      "data": {
+        "sequence": [9,7,5,3],
+        "options": [2, 1, 0]
+      },
+      "hints": [
+        "Check if it's decreasing by 2 each time."
+      ],
+      "solution": 1,
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p4_l10",
+      "level": 10,
+      "difficulty": 1,
+      "type": "mathEquation",
+      "instructions": "Compute: 6 × ? + 2 = 20",
+      "data": {
+        "equation": "6 × ? + 2 = 20",
+        "choices": [3, 4, 5]
+      },
+      "hints": [
+        "Subtract 2 first, then see how many 6's remain."
+      ],
+      "solution": 3,
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p5_l10",
+      "level": 10,
       "difficulty": 2,
       "type": "symbolicAnagram",
-      "instructions": "Rearrange letters: A, R, T to form a word.",
+      "instructions": "Arrange letters:E, W, T,A,   R",
       "data": {
-        "letters": ["A", "R", "T"],
-        "valid_words": ["ART", "RAT", "TAR"]
+        "letters": ["W","A","T","E","R"],
+        "valid_words": ["WATER", "TAWER", "WRATE"]
       },
-      "hints": ["'ART' is a common word."],
-      "solution": "ART",
+      "hints": [
+        "Essential for life, fluid in form."
+      ],
+      "solution": "WATER",
       "attempts": 3,
       "coins_reward": 2,
-      "score_reward": 6
+      "score_reward": 5
     },
     {
-      "id": "p7_l3",
-      "level": 3,
+      "id": "p6_l10",
+      "level": 10,
       "difficulty": 2,
       "type": "mathEquation",
-      "instructions": "Solve: 7 + ? = 10",
+      "instructions": "Solve: (8 - ?) × 2 = 10",
       "data": {
-        "equation": "7 + ? = 10",
-        "choices": [3, 2, 5]
+        "equation": "(8 - ?) × 2 = 10",
+        "choices": [2, 3, 4]
       },
-      "hints": ["10 - 7 = 3."],
+      "hints": [
+        "Divide 10 by 2 first, then see what's left from 8."
+      ],
       "solution": 3,
       "attempts": 3,
       "coins_reward": 2,
-      "score_reward": 6
+      "score_reward": 5
     },
-  
     {
-      "id": "p8_l3",
-      "level": 3,
+      "id": "p7_l10",
+      "level": 10,
+      "difficulty": 2,
+      "type": "logicalSequence",
+      "instructions": "Continue: 1, 3, 6, 10, 15, ?",
+      "data": {
+        "sequence": [1,3,6,10,15],
+        "options": [21, 22, 19]
+      },
+      "hints": [
+        "Triangular numbers grow by successive increments."
+      ],
+      "solution": 21,
+      "attempts": 3,
+      "coins_reward": 2,
+      "score_reward": 5
+    },
+    {
+      "id": "p8_l10",
+      "level": 10,
       "difficulty": 3,
       "type": "cipherCode",
-      "instructions": "Decode 'ZRUOG' (Caesar shift -3).",
+      "instructions": "Decode 'GSRH' (shift -7).",
       "data": {
-        "cipher": "ZRUOG",
-        "shift": -3
+        "cipher": "GSRH",
+        "shift": -7
       },
-      "hints": ["Z->W, R->O, U->R, O->L, G->D"],
-      "solution": "WORLD",
+      "hints": [
+        "A classic puzzle using reverse alphabets. Step each letter back."
+      ],
+      "solution": "ZLKA",
       "attempts": 3,
       "coins_reward": 3,
-      "score_reward": 9
+      "score_reward": 8
     },
     {
-      "id": "p9_l3",
-      "level": 3,
+      "id": "p9_l10",
+      "level": 10,
       "difficulty": 3,
-      "type": "cipherCode",
-      "instructions": "Decode 'ABC' (shift -1).",
+      "type": "sumOfNumbers",
+      "instructions": "Reach 66 from [25, 10, 15, 16, 6].",
       "data": {
-        "cipher": "ABC",
-        "shift": -1
+        "numbers": [25, 10, 15, 16, 6],
+        "target": 66
       },
-      "hints": ["A->Z, B->A, C->B = ZAB"],
-      "solution": "ZAB",
+      "hints": [
+        "Try combining the largest with a mid-range piece first."
+      ],
+      "solution": [25, 16, 15, 10],
       "attempts": 3,
       "coins_reward": 3,
-      "score_reward": 9
+      "score_reward": 8
     },
-  
     {
-      "id": "p10_l3",
-      "level": 3,
+      "id": "p10_l10",
+      "level": 10,
       "difficulty": 4,
       "type": "symbolicAnagram",
-      "instructions": "Rearrange letters: L, I, V, E",
+      "instructions": "Rearrange letters: C, L,  M,I, B",
       "data": {
-        "letters": ["L","I","V","E"],
-        "valid_words": ["LIVE","EVIL","VILE","LEVI"]
+        "letters": ["C","L","I","M","B"],
+        "valid_words": ["CLIMB", "BIMCL", "MCLBI"]
       },
-      "hints": ["'LIVE' and 'EVIL' are common words."],
-      "solution": "LIVE",
+      "hints": [
+        "Ascending to a new height, step by step."
+      ],
+      "solution": "CLIMB",
+      "attempts": 3,
+      "coins_reward": 4,
+      "score_reward": 12
+    },
+  
+   
+    {
+      "id": "p1_l11",
+      "level": 11,
+      "difficulty": 1,
+      "type": "sumOfNumbers",
+      "instructions": "Use [3, 4, 9, 9, 5] to total 18.",
+      "data": {
+        "numbers": [3,4,9,9,5],
+        "target": 18
+      },
+      "hints": [
+        "One of the nines plus smaller bits might do the trick."
+      ],
+      "solution": [9,4,5],
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p2_l11",
+      "level": 11,
+      "difficulty": 1,
+      "type": "sumOfNumbers",
+      "instructions": "Form 23 from these: [10, 8, 5, 3, 2].",
+      "data": {
+        "numbers": [10, 8, 5, 3, 2],
+        "target": 23
+      },
+      "hints": [
+        "Combine the largest pair, see if there's a leftover."
+      ],
+      "solution": [10,8,5],
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p3_l11",
+      "level": 11,
+      "difficulty": 1,
+      "type": "logicalSequence",
+      "instructions": "Next: 4, 6, 9, 13, ?",
+      "data": {
+        "sequence": [4,6,9,13],
+        "options": [18, 17, 16]
+      },
+      "hints": [
+        "Check the incremental steps: +2, +3, +4..."
+      ],
+      "solution": 18,
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p4_l11",
+      "level": 11,
+      "difficulty": 1,
+      "type": "mathEquation",
+      "instructions": "Solve: 9 / 3 + ? = 8",
+      "data": {
+        "equation": "9 / 3 + ? = 8",
+        "choices": [5, 3, 6]
+      },
+      "hints": [
+        "Focus on the fraction first, then fill the gap to 8."
+      ],
+      "solution": 6,
+      "attempts": 3,
+      "coins_reward": 1,
+      "score_reward": 3
+    },
+    {
+      "id": "p5_l11",
+      "level": 11,
+      "difficulty": 2,
+      "type": "symbolicAnagram",
+      "instructions": "Rearrange: F, M, L, A, E",
+      "data": {
+        "letters": ["F","L","A","M","E"],
+        "valid_words": ["FLAME", "MAFLE", "FEMAL"]
+      },
+      "hints": [
+        "A spark or a blaze might be the word."
+      ],
+      "solution": "FLAME",
+      "attempts": 3,
+      "coins_reward": 2,
+      "score_reward": 5
+    },
+    {
+      "id": "p6_l11",
+      "level": 11,
+      "difficulty": 2,
+      "type": "mathEquation",
+      "instructions": "Compute: (15 - ?) / 5 = 2",
+      "data": {
+        "equation": "(15 - ?) / 5 = 2",
+        "choices": [5, 7, 10]
+      },
+      "hints": [
+        "Multiply 2 by 5 to see what's left from 15."
+      ],
+      "solution": 5,
+      "attempts": 3,
+      "coins_reward": 2,
+      "score_reward": 5
+    },
+    {
+      "id": "p7_l11",
+      "level": 11,
+      "difficulty": 2,
+      "type": "logicalSequence",
+      "instructions": "Continue: 10, 12, 15, 19, ?",
+      "data": {
+        "sequence": [10,12,15,19],
+        "options": [24, 23, 22]
+      },
+      "hints": [
+        "Look at how each jump grows by 1 each time: +2, +3, +4..."
+      ],
+      "solution": 24,
+      "attempts": 3,
+      "coins_reward": 2,
+      "score_reward": 5
+    },
+    {
+      "id": "p8_l11",
+      "level": 11,
+      "difficulty": 3,
+      "type": "cipherCode",
+      "instructions": "Decode 'UFTU' (shift +1).",
+      "data": {
+        "cipher": "UFTU",
+        "shift": 1
+      },
+      "hints": [
+        "Step each letter forward: U->V, F->G..."
+      ],
+      "solution": "VGUV",
+      "attempts": 3,
+      "coins_reward": 3,
+      "score_reward": 8
+    },
+    {
+      "id": "p9_l11",
+      "level": 11,
+      "difficulty": 3,
+      "type": "sumOfNumbers",
+      "instructions": "Get 50 out of [20, 10, 5, 15, 5, 10].",
+      "data": {
+        "numbers": [20, 10, 5, 15, 5, 10],
+        "target": 50
+      },
+      "hints": [
+        "Combine multiple tens and a 20, but watch leftover."
+      ],
+      "solution": [20, 15, 10, 5],
+      "attempts": 3,
+      "coins_reward": 3,
+      "score_reward": 8
+    },
+    {
+      "id": "p10_l11",
+      "level": 11,
+      "difficulty": 4,
+      "type": "symbolicAnagram",
+      "instructions": "Rearrange: B,  N, R, A, I,S",
+      "data": {
+        "letters": ["B","R","A","I","N","S"],
+        "valid_words": ["BRAINS", "SABRIN", "BASRIN", "RANBIS"]
+      },
+      "hints": [
+        "Something crucial to thinking or intelligence."
+      ],
+      "solution": "BRAINS",
       "attempts": 3,
       "coins_reward": 4,
       "score_reward": 12
     },
   
   
-    {
-      "id": "d1",
-      "type": "sumOfNumbers",
-      "instructions": "Select numbers that add up to 9.",
-      "data": {
-        "numbers": [1,2,6,5],
-        "target": 9
-      },
-      "hints": ["Try 6 + 3, but there's no 3, so maybe 6+2+1."],
-      "solution": [6,2,1],
-      "attempts": 3,
-      "coins_reward": 1,
-      "score_reward": 0
+
+  {
+    "id": "d1",
+    "type": "sumOfNumbers",
+    "instructions": "Select numbers that add up to 9.",
+    "data": {
+      "numbers": [1, 2, 6, 5],
+      "target": 9
     },
-    {
-      "id": "d2",
-      "type": "logicalSequence",
-      "instructions": "Next number: 3, 6, 12, ?",
-      "data": {
-        "sequence": [3,6,12],
-        "options": [24,18,15]
-      },
-      "hints": ["It doubles each time."],
-      "solution": 24,
-      "attempts": 3,
-      "coins_reward": 1,
-      "score_reward": 0
+    "hints": [
+      "Combining that 6 might be important, but you still need a bit more."
+    ],
+    "solution": [6, 2, 1],
+    "attempts": 3,
+    "coins_reward": 1,
+    "score_reward": 0
+  },
+  {
+    "id": "d2",
+    "type": "logicalSequence",
+    "instructions": "Next number: 3, 6, 12, ?",
+    "data": {
+      "sequence": [3, 6, 12],
+      "options": [24, 18, 15]
     },
-    {
-      "id": "d3",
-      "type": "mathEquation",
-      "instructions": "Solve: 2 + ? = 5",
-      "data": {
-        "equation": "2 + ? = 5",
-        "choices": [3,2,4]
-      },
-      "hints": ["5-2=3."],
-      "solution": 3,
-      "attempts": 3,
-      "coins_reward": 1,
-      "score_reward": 0
+    "hints": [
+      "Look carefully at the factor that ties each step together."
+    ],
+    "solution": 24,
+    "attempts": 3,
+    "coins_reward": 1,
+    "score_reward": 0
+  },
+  {
+    "id": "d3",
+    "type": "mathEquation",
+    "instructions": "Solve: 2 + ? = 5",
+    "data": {
+      "equation": "2 + ? = 5",
+      "choices": [3, 2, 4]
     },
-    {
-      "id": "d4",
-      "type": "mathEquation",
-      "instructions": "Solve: 3 + ? = 9",
-      "data": {
-        "equation": "3 + ? = 9",
-        "choices": [6,7,5]
-      },
-      "hints": ["9-3=6"],
-      "solution": 6,
-      "attempts": 3,
-      "coins_reward": 1,
-      "score_reward": 0
+    "hints": [
+      "Sometimes bridging the gap is as easy as basic addition."
+    ],
+    "solution": 3,
+    "attempts": 3,
+    "coins_reward": 1,
+    "score_reward": 0
+  },
+  {
+    "id": "d4",
+    "type": "mathEquation",
+    "instructions": "Solve: 3 + ? = 9",
+    "data": {
+      "equation": "3 + ? = 9",
+      "choices": [6, 7, 5]
     },
-    {
-      "id": "d5",
-      "type": "symbolicAnagram",
-      "instructions": "Rearrange: D, O, G",
-      "data": {
-        "letters": ["D","O","G"],
-        "valid_words": ["DOG","GOD"]
-      },
-      "hints": ["'DOG' is a common animal."],
-      "solution": "DOG",
-      "attempts": 3,
-      "coins_reward": 1,
-      "score_reward": 0
+    "hints": [
+      "Subtracting what's given from the total is a direct route."
+    ],
+    "solution": 6,
+    "attempts": 3,
+    "coins_reward": 1,
+    "score_reward": 0
+  },
+  {
+    "id": "d5",
+    "type": "symbolicAnagram",
+    "instructions": "Rearrange: D, O, G",
+    "data": {
+      "letters": ["D", "O", "G"],
+      "valid_words": ["DOG", "GOD"]
     },
-    {
-      "id": "d6",
-      "type": "cipherCode",
-      "instructions": "Decode 'EBIIL' (shift -1).",
-      "data": {
-        "cipher": "EBIIL",
-        "shift": -1
-      },
-      "hints": ["E->D,B->A,I->H,I->H,L->K = DAHHK"],
-      "solution": "DHHAK",
-      "attempts": 3,
-      "coins_reward": 1,
-      "score_reward": 0
+    "hints": [
+      "This could be a loyal companion or a divine force—just rearrange."
+    ],
+    "solution": "GOD",
+    "attempts": 3,
+    "coins_reward": 1,
+    "score_reward": 0
+  },
+  {
+    "id": "d6",
+    "type": "cipherCode",
+    "instructions": "Decode 'EBIIL' (shift -1).",
+    "data": {
+      "cipher": "EBIIL",
+      "shift": -1
     },
-    {
-      "id": "d7",
-      "type": "mathEquation",
-      "instructions": "Solve: 8 - ? = 2",
-      "data": {
-        "equation": "8 - ? = 2",
-        "choices": [6,5,10]
-      },
-      "hints": ["8-6=2."],
-      "solution": 6,
-      "attempts": 3,
-      "coins_reward": 1,
-      "score_reward": 0
-    }
-  ]
-  
+    "hints": [
+      "Shifting each letter backward reveals a cryptic phrase—listen closely."
+    ],
+    "solution": "DHHAK",
+    "attempts": 3,
+    "coins_reward": 1,
+    "score_reward": 0
+  },
+  {
+    "id": "d7",
+    "type": "mathEquation",
+    "instructions": "Solve: 8 - ? = 2",
+    "data": {
+      "equation": "8 - ? = 2",
+      "choices": [6, 5, 10]
+    },
+    "hints": [
+      "Narrow down which subtraction yields the difference you see."
+    ],
+    "solution": 6,
+    "attempts": 3,
+    "coins_reward": 1,
+    "score_reward": 0
+  }
+]
