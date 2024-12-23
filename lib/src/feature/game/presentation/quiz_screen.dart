@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:brainstorm_quest/ui_kit/app_card.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -379,21 +380,36 @@ class _QuizScreenState extends State<QuizScreen> {
         Wrap(
           spacing: 10,
           children: numbers.map((num) {
-            return _buildNumPadButton(num.toString(), puzzle);
+            double? topLeftRadius = num == numbers.first ? 20 : null;
+            double? topRightRadius = num == numbers.last ? 20 : null;
+            return _buildNumPadButton(
+                label: num.toString(),
+                puzzle: puzzle,
+                topLeftRadius: topLeftRadius,
+                topRightRadius: topRightRadius);
           }).toList(),
         ),
         const Gap(10),
         Wrap(
           spacing: 10,
           children: [
-            _buildNumPadButton('⌫', puzzle),
-            SizedBox(
-              width: 80,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () => _checkSolution(puzzle),
-                child: const Text('CONFIRM',
-                    style: TextStyle(color: Colors.black)),
+            _buildNumPadButton(
+                label: '⌫', puzzle: puzzle, bottomLeftRadius: 20),
+            AppCard(
+              width: 61 * numbers.length - 71,
+              height: 61,
+              borderRadius: 2,
+              bottomRightRadius: 20,
+              color: AppContainerColor.pink,
+              onTap: () => _checkSolution(puzzle),
+              child: Center(
+                child: FittedBox(
+                  child: TextWithBorder(
+                    text: 'CONFIRM',
+                    borderColor: Colors.black,
+                    fontSize: 33,
+                  ),
+                ),
               ),
             ),
           ],
@@ -402,15 +418,30 @@ class _QuizScreenState extends State<QuizScreen> {
     );
   }
 
-  Widget _buildNumPadButton(String label, Puzzle puzzle) {
-    return SizedBox(
-      width: 50,
-      height: 50,
-      child: ElevatedButton(
-        onPressed: () => _handleNumPadInput(label, puzzle),
-        child: Text(label, style: const TextStyle(color: Colors.black)),
-      ),
-    );
+  Widget _buildNumPadButton(
+      {required String label,
+      required Puzzle puzzle,
+      double? topLeftRadius,
+      double? bottomRightRadius,
+      double? topRightRadius,
+      double? bottomLeftRadius}) {
+    return AppCard(
+        color: AppContainerColor.pink,
+        width: 51,
+        height: 61,
+        topLeftRadius: topLeftRadius,
+        topRightRadius: topRightRadius,
+        bottomRightRadius: bottomRightRadius,
+        bottomLeftRadius: bottomLeftRadius,
+        onTap: () => _handleNumPadInput(label, puzzle),
+        borderRadius: 2,
+        child: Center(
+          child: TextWithBorder(
+            text: label,
+            borderColor: Colors.black,
+            fontSize: 33,
+          ),
+        ));
   }
 
   void _handleNumPadInput(String key, Puzzle puzzle) {

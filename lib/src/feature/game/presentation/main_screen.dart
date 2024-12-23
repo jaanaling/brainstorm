@@ -44,7 +44,7 @@ class MainScreen extends StatelessWidget {
                       _buildFlagItem(
                         () {
                           context.push(
-                            "${RouteValue.home.path}/${RouteValue.achievements.path}",
+                            '${RouteValue.home.path}/${RouteValue.achievements.path}',
                           );
                         },
                         AppIcon(
@@ -132,7 +132,7 @@ class MainScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Center(
                   child: RoundedPieChart(
                     isHomeScreen: true,
@@ -148,22 +148,24 @@ class MainScreen extends StatelessWidget {
                 //    value: state.user.points.toDouble(),
                 //  ),
 
-                Spacer(),
+                const Spacer(),
                 AppButton(
                   text: 'select riddle',
                   color: ButtonColors.purple,
-                  onPressed: () => context
-                      .push("${RouteValue.home.path}/${RouteValue.select.path}",),
+                  onPressed: () => context.push(
+                    '${RouteValue.home.path}/${RouteValue.select.path}',
+                  ),
                 ),
-                Gap(14),
+                const Gap(14),
                 AppButton(
                   color: ButtonColors.yellow,
                   text: 'everyday riddle',
                   onPressed: () => context.push(
-                      "${RouteValue.home.path}/${RouteValue.dayli.path}",
-                      extra: "d${DateTime.now().weekday}"),
+                    '${RouteValue.home.path}/${RouteValue.dayli.path}',
+                    extra: 'd${DateTime.now().weekday}',
+                  ),
                 ),
-                Gap(14),
+                const Gap(14),
               ],
             ),
           );
@@ -227,19 +229,19 @@ class MainScreen extends StatelessWidget {
       children: [
         ElevatedButton(
           onPressed: () {
-            context.push("${RouteValue.home.path}/${RouteValue.select.path}");
+            context.push('${RouteValue.home.path}/${RouteValue.select.path}');
           },
-          child: const Text("Select Level"),
+          child: const Text('Select Level'),
         ),
         ElevatedButton(
           onPressed: () {
             context.push(
-              "${RouteValue.home.path}/${RouteValue.dayli.path}",
-              extra: "d${DateTime.now().weekday}",
+              '${RouteValue.home.path}/${RouteValue.dayli.path}',
+              extra: 'd${DateTime.now().weekday}',
             );
           },
           style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-          child: const Text("Everyday Riddle"),
+          child: const Text('Everyday Riddle'),
         ),
       ],
     );
@@ -272,12 +274,7 @@ void showBuyHintDialog(BuildContext context) {
                     ),
                     borderRadius: BorderRadius.circular(31),
                   ),
-                  shadows: const [
-                    BoxShadow(
-                      color: Color(0xFF2A004A),
-                      offset: Offset(0, 4),
-                    ),
-                  ],
+                  
                 ),
               ),
               Center(
@@ -313,44 +310,49 @@ void showBuyHintDialog(BuildContext context) {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 50),
-                      child: Row(children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Image.asset(
-                              IconProvider.coins.buildImageUrl(),
-                              width: 52,
-                              height: 61,
-                              fit: BoxFit.fill,
-                            ),
-                            TextWithBorder(
-                              text: "15",
-                              borderColor: Colors.black,
-                              fontSize: 34,
-                            )
-                          ],
-                        ),
-                        const Spacer(),
-                        Icon(Icons.arrow_right_alt,
-                            color: Colors.white, size: 45),
-                        const Spacer(),
-                        Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Image.asset(
-                              IconProvider.hint.buildImageUrl(),
-                              width: 35,
-                              height: 61,
-                              fit: BoxFit.fill,
-                            ),
-                            TextWithBorder(
-                              text: "1",
-                              borderColor: Colors.black,
-                              fontSize: 34,
-                            )
-                          ],
-                        )
-                      ]),
+                      child: Row(
+                        children: [
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset(
+                                IconProvider.coins.buildImageUrl(),
+                                width: 52,
+                                height: 61,
+                                fit: BoxFit.fill,
+                              ),
+                              const TextWithBorder(
+                                text: '15',
+                                borderColor: Colors.black,
+                                fontSize: 34,
+                              ),
+                            ],
+                          ),
+                          const Spacer(),
+                          const Icon(
+                            Icons.arrow_right_alt,
+                            color: Colors.white,
+                            size: 45,
+                          ),
+                          const Spacer(),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset(
+                                IconProvider.hint.buildImageUrl(),
+                                width: 35,
+                                height: 61,
+                                fit: BoxFit.fill,
+                              ),
+                              const TextWithBorder(
+                                text: '1',
+                                borderColor: Colors.black,
+                                fontSize: 34,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -359,7 +361,7 @@ void showBuyHintDialog(BuildContext context) {
                 top: 0,
                 child: Container(
                   width: 295,
-                  height: 95,
+                  height: 100,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(
@@ -411,12 +413,18 @@ void showBuyHintDialog(BuildContext context) {
                 ),
               ),
               Positioned(
-                  bottom: 20,
-                  child: AppButton(color: ButtonColors.yellow, text: 'buy',  width: 183,
-                      height: 69, onPressed: () {
-                    Navigator.of(context).pop();
+                bottom: 20,
+                child: AppButton(
+                  color: ButtonColors.yellow,
+                  text: 'buy',
+                  width: 183,
+                  height: 69,
+                  onPressed: () {
+                    context.pop();
                     context.read<AppBloc>().add(BuyHint());
-                  }))
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -591,7 +599,7 @@ class _RoundedPieChartState extends State<RoundedPieChart>
                 },
               ),
               // 2) Текст в центре (числовое значение)
-              GradientText(widget.points.toString(), fontSize: 47)
+              GradientText(widget.points.toString(), fontSize: 47),
             ],
           ),
         );
@@ -735,7 +743,8 @@ class _CustomProgressIndicatorState extends State<CustomProgressIndicator>
               whiteStrokeWidth: _whiteBorderAnimation.value,
             ),
             child: Center(
-                child: GradientText(widget.value.toString(), fontSize: 47)),
+              child: GradientText(widget.value.toString(), fontSize: 47),
+            ),
           ),
         );
       },
