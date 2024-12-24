@@ -147,7 +147,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       final updatedAchievements =
           await _checkAchievements(updatedUser, currentState.achievements);
 
-      emit(AppLoaded(updatedUser, updatedPuzzles, updatedAchievements));
+       final updatedupdetedUser = await userRepository.load();
+
+      emit(AppLoaded(
+          updatedupdetedUser.firstWhere((u) => u.id == updatedUser.id),
+          currentState.puzzles,
+          updatedAchievements));
     } catch (e) {
       logger.e(e);
       emit(const AppError('Failed to check puzzle solution'));
@@ -187,29 +192,32 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
     await achievementRepository.saveAll(updatedAchievements);
     await userRepository.update(updatedUser);
+    final updatedupdetedUser = await userRepository.load();
 
-    emit(AppLoaded(updatedUser, currentState.puzzles, updatedAchievements));
+    emit(AppLoaded(updatedupdetedUser.firstWhere((u) => u.id == updatedUser.id),
+        currentState.puzzles, updatedAchievements));
   }
 
   Future<void> _onBuyHint(BuyHint event, Emitter<AppState> emit) async {
     final currentState = state;
     if (currentState is! AppLoaded) return;
 
-    if (currentState.user.coins >= 20) {
+    if (currentState.user.coins >= 15) {
       final updatedUser = currentState.user.copyWith(
-        coins: currentState.user.coins - 20,
+        coins: currentState.user.coins - 15,
         hints: currentState.user.hints + 1,
       );
 
       await userRepository.update(updatedUser);
+      final updatedAchievements =
+          await _checkAchievements(updatedUser, currentState.achievements);
 
-      emit(
-        AppLoaded(
-          updatedUser,
+      final updatedupdetedUser = await userRepository.load();
+
+      emit(AppLoaded(
+          updatedupdetedUser.firstWhere((u) => u.id == updatedUser.id),
           currentState.puzzles,
-          currentState.achievements,
-        ),
-      );
+          updatedAchievements));
     } else {
       emit(const AppError("Not enough coins to buy a hint"));
     }
@@ -228,8 +236,15 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       final updatedUser =
           currentState.user.copyWith(hints: currentState.user.hints - 1);
       await userRepository.update(updatedUser);
+      final updatedAchievements =
+          await _checkAchievements(updatedUser, currentState.achievements);
+
+      final updatedupdetedUser = await userRepository.load();
+
       emit(AppLoaded(
-          updatedUser, currentState.puzzles, currentState.achievements));
+          updatedupdetedUser.firstWhere((u) => u.id == updatedUser.id),
+          currentState.puzzles,
+          updatedAchievements));
     } else {
       emit(const AppError("No hints available"));
     }
@@ -248,56 +263,138 @@ class AppBloc extends Bloc<AppEvent, AppState> {
             user.completedPuzzles.isNotEmpty) {
           updatedAchievements[i] = ach.copyWith(unlocked: true);
           user.unlockedAchievements.add(ach.id);
+          await userRepository.update(
+            user.copyWith(
+              unlockedAchievements: user.unlockedAchievements,
+              coins: user.coins + achievements[i].coinReward,
+            ),
+          );
         }
 
         if (ach.id == "rich_player" && user.coins >= 100) {
           updatedAchievements[i] = ach.copyWith(unlocked: true);
           user.unlockedAchievements.add(ach.id);
+
+          await userRepository.update(
+            user.copyWith(
+              unlockedAchievements: user.unlockedAchievements,
+              coins: user.coins + achievements[i].coinReward,
+            ),
+          );
         }
 
         if (ach.id == "fifty_points" && user.points >= 50) {
           updatedAchievements[i] = ach.copyWith(unlocked: true);
           user.unlockedAchievements.add(ach.id);
+
+          await userRepository.update(
+            user.copyWith(
+              unlockedAchievements: user.unlockedAchievements,
+              coins: user.coins + achievements[i].coinReward,
+            ),
+          );
         }
 
         if (ach.id == "ten_puzzles_done" &&
             user.completedPuzzles.length >= 10) {
           updatedAchievements[i] = ach.copyWith(unlocked: true);
           user.unlockedAchievements.add(ach.id);
+
+          await userRepository.update(
+            user.copyWith(
+              unlockedAchievements: user.unlockedAchievements,
+              coins: user.coins + achievements[i].coinReward,
+            ),
+          );
         }
 
         if (ach.id == "buy_hint" && user.hints >= 1) {
           updatedAchievements[i] = ach.copyWith(unlocked: true);
           user.unlockedAchievements.add(ach.id);
+
+          await userRepository.update(
+            user.copyWith(
+              unlockedAchievements: user.unlockedAchievements,
+              coins: user.coins + achievements[i].coinReward,
+            ),
+          );
         }
 
         if (ach.id == "solve_hard_puzzle") {
           bool hasHardPuzzle = false;
           for (var p in user.completedPuzzles) {
-            List<Puzzle> puzzles = (state as AppCheckingPuzzle).puzzles;
-            List<String> difficulty = puzzles
-                .where((p) => p.difficulty == 4)
-                .map((e) => e.id)
-                .toList();
-            if (difficulty.contains(p)) {
-              hasHardPuzzle = true;
-              break;
+            final state = this.state;
+            if (state is AppLoaded) {
+              List<Puzzle> puzzles = state.puzzles;
+              List<String> difficulty = puzzles
+                  .where((p) => p.difficulty == 4)
+                  .map((e) => e.id)
+                  .toList();
+              if (difficulty.contains(p)) {
+                hasHardPuzzle = true;
+                user.unlockedAchievements.add(ach.id);
+                await userRepository.update(
+                  user.copyWith(
+                    unlockedAchievements: user.unlockedAchievements,
+                    coins: user.coins + achievements[i].coinReward,
+                  ),
+                );
+                break;
+              }
+            } else {
+              List<Puzzle> puzzles = (state as AppCheckingPuzzle).puzzles;
+              List<String> difficulty = puzzles
+                  .where((p) => p.difficulty == 4)
+                  .map((e) => e.id)
+                  .toList();
+              if (difficulty.contains(p)) {
+                hasHardPuzzle = true;
+                user.unlockedAchievements.add(ach.id);
+                await userRepository.update(
+                  user.copyWith(
+                    unlockedAchievements: user.unlockedAchievements,
+                    coins: user.coins + achievements[i].coinReward,
+                  ),
+                );
+                break;
+              }
             }
           }
           if (hasHardPuzzle) {
             updatedAchievements[i] = ach.copyWith(unlocked: true);
             user.unlockedAchievements.add(ach.id);
+
+            await userRepository.update(
+              user.copyWith(
+                unlockedAchievements: user.unlockedAchievements,
+                coins: user.coins + achievements[i].coinReward,
+              ),
+            );
           }
         }
 
         if (ach.id == "100_coins" && user.coins >= 100) {
           updatedAchievements[i] = ach.copyWith(unlocked: true);
           user.unlockedAchievements.add(ach.id);
+
+          await userRepository.update(
+            user.copyWith(
+              unlockedAchievements: user.unlockedAchievements,
+              coins: user.coins + achievements[i].coinReward,
+            ),
+          );
         }
 
         if (ach.id == "3_hints" && user.hints >= 3) {
           updatedAchievements[i] = ach.copyWith(unlocked: true);
           user.unlockedAchievements.add(ach.id);
+
+          await userRepository.update(
+            user.copyWith(
+              unlockedAchievements: user.unlockedAchievements,
+              coins: user.coins + achievements[i].coinReward,
+            ),
+          );
         }
 
         if (ach.id == "finish_level_1") {
@@ -305,6 +402,12 @@ class AppBloc extends Bloc<AppEvent, AppState> {
           if (finishedLevel1) {
             updatedAchievements[i] = ach.copyWith(unlocked: true);
             user.unlockedAchievements.add(ach.id);
+            await userRepository.update(
+              user.copyWith(
+                unlockedAchievements: user.unlockedAchievements,
+                coins: user.coins + achievements[i].coinReward,
+              ),
+            );
           }
         }
       }
@@ -327,6 +430,16 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   List<String> getAllLevel1PuzzleIds() {
+    final state = this.state;
+    if (state is AppLoaded) {
+      return (state)
+          .puzzles
+          .where((element) => element.level == 1)
+          .map((e) => e.id)
+          .toList();
+    }
+    ;
+
     final levels = (state as AppCheckingPuzzle)
         .puzzles
         .where((element) => element.level == 1)

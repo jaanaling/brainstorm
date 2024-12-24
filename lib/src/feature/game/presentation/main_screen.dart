@@ -136,18 +136,14 @@ class MainScreen extends StatelessWidget {
                 Center(
                   child: RoundedPieChart(
                     isHomeScreen: true,
-                    value: 0.5,
-                    // value: state.user.points.toDouble() /
-                    //     state.puzzles.fold(
-                    //       0,
-                    //       (sum, element) => sum + element.scoreReward,
-                    //     ),
+                    value: state.user.points.toDouble() /
+                        state.puzzles.fold(
+                          0,
+                          (sum, element) => sum + element.scoreReward,
+                        ),
+                        point: state.user.points,
                   ),
                 ),
-                //  CustomProgressIndicator(
-                //    value: state.user.points.toDouble(),
-                //  ),
-
                 const Spacer(),
                 AppButton(
                   text: 'select riddle',
@@ -480,10 +476,14 @@ class FlagPainter extends CustomPainter {
 
 class RoundedPieChart extends StatefulWidget {
   final double value;
+  final int point;
   final bool isHomeScreen;
 
   const RoundedPieChart(
-      {Key? key, required this.value, this.isHomeScreen = false})
+      {Key? key,
+      required this.value,
+      this.isHomeScreen = false,
+      required this.point})
       : super(key: key);
 
   @override
@@ -541,15 +541,24 @@ class _RoundedPieChartState extends State<RoundedPieChart>
       builder: (context, child) {
         return Stack(
           children: [
-            AppIcon(asset: IconProvider.diagram.buildImageUrl(), width: 313, height:  326),
+            AppIcon(
+                asset: IconProvider.diagram.buildImageUrl(),
+                width: 313,
+                height: 326),
             Padding(
               padding: const EdgeInsets.only(top: 21, left: 11),
-              child: CustomPaint(
-                size: isIpad(context) && widget.isHomeScreen
-                    ? Size(588, 588)
-                    : Size(294, 294),
-                painter: PieChartPainter(_animation.value, context,
-                    isHomeScreen: widget.isHomeScreen),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  GradientText(widget.point.toString(), fontSize: 43),
+                  CustomPaint(
+                    size: isIpad(context) && widget.isHomeScreen
+                        ? Size(588, 588)
+                        : Size(294, 294),
+                    painter: PieChartPainter(_animation.value, context,
+                        isHomeScreen: widget.isHomeScreen),
+                  ),
+                ],
               ),
             ),
           ],
@@ -568,7 +577,8 @@ class PieChartPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final double radius = (size.width / 2) - (isIpad(context) && isHomeScreen ? 132 : 66) / 2;
+    final double radius =
+        (size.width / 2) - (isIpad(context) && isHomeScreen ? 132 : 66) / 2;
     final Offset center = Offset(size.width / 2, size.height / 2);
 
     // Background Section (Always full circle)

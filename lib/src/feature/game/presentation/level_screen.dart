@@ -3,6 +3,7 @@ import 'package:brainstorm_quest/routes/route_value.dart';
 import 'package:brainstorm_quest/src/core/utils/icon_provider.dart';
 import 'package:brainstorm_quest/src/feature/game/bloc/app_bloc.dart';
 import 'package:brainstorm_quest/src/feature/game/model/puzzle.dart';
+import 'package:brainstorm_quest/src/feature/game/presentation/main_screen.dart';
 import 'package:brainstorm_quest/ui_kit/app_bar.dart';
 import 'package:brainstorm_quest/ui_kit/gradient_text_with_border.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,16 @@ class LevelScreen extends StatelessWidget {
               ),
             ),
             middleSection: _buildLevelContent(context, puzzles),
-            bottomSection: _buildProgressIndicator(allScore, userScore),
+            bottomSection:  Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: RoundedPieChart(
+                      isHomeScreen: true,
+                      value:userScore /
+                         allScore,
+                          point: userScore,
+                    ),
+            )
+                  ,
           );
         }
         return const SizedBox.shrink();
@@ -61,7 +71,7 @@ class LevelScreen extends StatelessWidget {
   Widget _buildLevelContent(BuildContext context, List<Puzzle> puzzles) {
     return Center(
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.5,
+        height: MediaQuery.of(context).size.height * 0.4,
         child: ListView.separated(
           reverse: true,
           itemCount: 4,

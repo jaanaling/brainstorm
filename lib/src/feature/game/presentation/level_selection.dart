@@ -29,7 +29,9 @@ class LevelSelectScreen extends StatelessWidget {
           return Scaffold(body: Center(child: Text(state.message)));
         }
         if (state is AppLoaded) {
-          final levels = state.puzzles.map((el) => el.level).toSet().toList();
+          final levels = state.puzzles.map((el) => el.level).toSet().toList()..remove(0);
+ 
+
           return SingleChildScrollView(
             child: SafeArea(
               child: Column(
@@ -57,7 +59,7 @@ class LevelSelectScreen extends StatelessWidget {
       child: Wrap(
         spacing: 7,
         runSpacing: 7,
-        children: List.generate(puzzles.length, (index) {
+        children: List.generate(levels.length, (index) {
           final achievement = puzzles[index];
 
           bool isAvaible = puzzles.any((element) =>
@@ -90,20 +92,24 @@ class LevelSelectScreen extends StatelessWidget {
                   "${RouteValue.home.path}/${RouteValue.select.path}/${RouteValue.level.path}", extra: index + 1);
             },
             color: isAvaible ? AppContainerColor.green : AppContainerColor.grey,
-            child: Column(
-              children: [
-                TextWithBorder(
-                  text: 'Level ${index + 1}',
-                  borderColor: const Color(0xFF075300),
-                  fontSize: isIpad(context) ? 35 : 28,
-                ),
-                const Gap(4),
-                TextWithBorder(
-                  text: 'Score: $userScore',
-                  borderColor: const Color(0xFF075300),
-                  fontSize: isIpad(context) ? 27 : 20,
-                ),
-              ],
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  TextWithBorder(
+                    text: 'Level ${index + 1}',
+                    borderColor: const Color(0xFF075300),
+                    fontSize: isIpad(context) ? 25 : 20,
+                  ),
+                  const Gap(12),
+                  TextWithBorder(
+                    text: 'Score: $userScore / $allScore',
+                    textAlign: TextAlign.center,
+                    borderColor: const Color(0xFF075300),
+                    fontSize: isIpad(context) ? 27 : 20,
+                  ),
+                ],
+              ),
             ),
           );
         }),
