@@ -11,6 +11,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/utils/size_utils.dart';
+
 class LevelScreen extends StatelessWidget {
   final int levelId;
 
@@ -71,7 +73,7 @@ class LevelScreen extends StatelessWidget {
   Widget _buildLevelContent(BuildContext context, List<Puzzle> puzzles) {
     return Center(
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.4,
+        height:isIpad(context)?MediaQuery.of(context).size.height * 0.7: MediaQuery.of(context).size.height * 0.4,
         child: ListView.separated(
           reverse: true,
           itemCount: 4,
@@ -88,7 +90,7 @@ class LevelScreen extends StatelessWidget {
                 ),
                 const Spacer(),
                 SizedBox(
-                  height: MediaQuery.of(context).size.width * 0.15,
+                  height:  MediaQuery.of(context).size.width * 0.15,
                   width: MediaQuery.of(context).size.width * 0.8,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -142,8 +144,8 @@ class LevelScreen extends StatelessWidget {
             : null,
         borderRadius: BorderRadius.circular(32),
         child: Ink.image(
-          width: MediaQuery.of(context).size.width * 0.14,
-          height: MediaQuery.of(context).size.width * 0.14,
+          width: isIpad(context)?MediaQuery.of(context).size.width * 0.1:  MediaQuery.of(context).size.width * 0.14,
+          height:isIpad(context)?MediaQuery.of(context).size.width * 0.1:  MediaQuery.of(context).size.width * 0.14,
           fit: BoxFit.cover,
           image: AssetImage(
             image,

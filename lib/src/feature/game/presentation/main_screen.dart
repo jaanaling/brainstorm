@@ -411,12 +411,15 @@ void showBuyHintDialog(BuildContext context) {
                 bottom: 20,
                 child: AppButton(
                   color: ButtonColors.yellow,
-                  text: 'buy',
+                  text: (context.read<AppBloc>().state as AppLoaded).user.coins > 15 ?'buy' : 'not enough coins',
                   width: 183,
                   height: 69,
                   onPressed: () {
                     context.pop();
-                    context.read<AppBloc>().add(BuyHint());
+                    if( (context.read<AppBloc>().state  as AppLoaded).user.coins > 15) {
+                      context.read<AppBloc>().add(BuyHint());
+                    }
+
                   },
                 ),
               ),
@@ -552,9 +555,8 @@ class _RoundedPieChartState extends State<RoundedPieChart>
                 children: [
                   GradientText(widget.point.toString(), fontSize: 43),
                   CustomPaint(
-                    size: isIpad(context) && widget.isHomeScreen
-                        ? Size(588, 588)
-                        : Size(294, 294),
+                    size:
+                         Size(294, 294),
                     painter: PieChartPainter(_animation.value, context,
                         isHomeScreen: widget.isHomeScreen),
                   ),
@@ -578,7 +580,7 @@ class PieChartPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final double radius =
-        (size.width / 2) - (isIpad(context) && isHomeScreen ? 132 : 66) / 2;
+        (size.width / 2) - (isIpad(context) && isHomeScreen ? 66 : 66) / 2;
     final Offset center = Offset(size.width / 2, size.height / 2);
 
     // Background Section (Always full circle)
@@ -591,7 +593,7 @@ class PieChartPainter extends CustomPainter {
         Rect.fromCircle(center: center, radius: radius),
       )
       ..style = PaintingStyle.stroke
-      ..strokeWidth = isIpad(context) && isHomeScreen ? 132 : 66;
+      ..strokeWidth = isIpad(context) && isHomeScreen ? 66 : 66;
 
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
@@ -613,7 +615,7 @@ class PieChartPainter extends CustomPainter {
         Rect.fromCircle(center: center, radius: radius),
       )
       ..style = PaintingStyle.stroke
-      ..strokeWidth = isIpad(context) && isHomeScreen ? 133 : 67
+      ..strokeWidth = isIpad(context) && isHomeScreen ? 67 : 67
       ..strokeCap = StrokeCap.round;
 
     canvas.drawArc(
