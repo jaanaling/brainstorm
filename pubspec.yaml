@@ -1,7 +1,7 @@
 name: brainstorm_quest
 description: "A new Flutter project."
 publish_to: 'none'
-version: 0.1.0
+version: 1.0.0
 
 environment:
   sdk: ^3.5.4
@@ -37,6 +37,7 @@ flutter:
      - assets/images/
      - assets/fonts/
      - assets/json/
+     - assets/generated/
   fonts:
     - family: Gulya
       fonts:
