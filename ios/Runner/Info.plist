@@ -45,5 +45,32 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<!-- PUSH NOTIFICATIONS CONFIG -->
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>fetch</string>
+        <string>remote-notification</string>
+    </array>
+    <!-- PUSH NOTIFICATIONS CONFIG -->
+
+    <!-- FACEBOOK SDK CONFIG -->
+    <key>CFBundleURLTypes</key>
+    <array>
+    <dict>
+       <key>CFBundleURLSchemes</key>
+       <array>
+          <string>fb435883139461989</string>
+       </array>
+    </dict>
+    </array>
+    <key>FacebookAppID</key>
+    <string>435883139461989</string>
+    <key>FacebookClientToken</key>
+    <string>bf76e0edd7bbbf17c1a8121434115f40</string>
+    <key>FacebookDisplayName</key>
+    <string>Brainstorm Quest</string>
+    <!-- FACEBOOK SDK CONFIG -->
+    <key>NSUserTrackingUsageDescription</key>
+        	<string>We use your device's IDFA (Identifier for Advertisers) to show relevant ads and improve your app experience.</string>
 </dict>
 </plist>
