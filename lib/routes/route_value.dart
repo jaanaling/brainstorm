@@ -21,6 +21,8 @@ enum RouteValue {
       path: 'quiz',
     ),
 
+
+  privicy(path: 'privicy'),
   unknown(
     path: '',
   );

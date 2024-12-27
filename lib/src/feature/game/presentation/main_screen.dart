@@ -162,6 +162,14 @@ class MainScreen extends StatelessWidget {
                   ),
                 ),
                 const Gap(14),
+                  AppButton(
+                  text: 'privacy policy',
+                  color: ButtonColors.purple,
+                  onPressed: () => context.push(
+                    '${RouteValue.home.path}/${RouteValue.privicy.path}',
+                  ),
+                ),
+                const Gap(14),
               ],
             ),
           );

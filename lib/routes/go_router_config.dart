@@ -3,6 +3,7 @@ import 'package:brainstorm_quest/src/feature/game/presentation/achievements_scre
 import 'package:brainstorm_quest/src/feature/game/presentation/level_screen.dart';
 import 'package:brainstorm_quest/src/feature/game/presentation/level_selection.dart';
 import 'package:brainstorm_quest/src/feature/game/presentation/main_screen.dart';
+import 'package:brainstorm_quest/src/feature/game/presentation/privacy_screen.dart';
 import 'package:brainstorm_quest/src/feature/game/presentation/quiz_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
@@ -41,6 +42,17 @@ GoRouter buildGoRouter = GoRouter(
                 return MainScreen();
               },
               routes: [
+                     GoRoute(
+                    parentNavigatorKey: _rootNavigatorKey,
+                    path: RouteValue.privicy.path,
+                    pageBuilder: (context, state) {
+                      return NoTransitionPage(
+                        child: PrivicyScreen(
+                          key: UniqueKey(),
+                        ),
+                      );
+                    },
+                  ),
                 GoRoute(
                   path: RouteValue.achievements.path,
                   builder: (BuildContext context, GoRouterState state) {
