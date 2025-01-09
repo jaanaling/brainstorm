@@ -61,6 +61,27 @@ class MainScreen extends StatelessWidget {
                         width: 75,
                         height: 118,
                       ),
+                      Gap(15),
+                      _buildFlagItem(
+                        () {
+                          context.push(
+                            '${RouteValue.home.path}/${RouteValue.privicy.path}',
+                          );
+                        },
+                        TextWithBorder(
+                          textAlign: TextAlign.center,
+                            text: 'Privacy\nPolicy',
+                            borderColor: Color(0xFF340052),
+                            fontSize: 16),
+                        [
+                          const Color.fromARGB(255, 214, 64, 19),
+                          const Color.fromARGB(255, 121, 21, 3),
+                        ],
+                        context,
+                        const Color.fromARGB(255, 44, 10, 2),
+                        width: 75,
+                        height: 118,
+                      ),
                       const Spacer(),
                       _buildFlagItem(
                         () {
@@ -141,7 +162,7 @@ class MainScreen extends StatelessWidget {
                           0,
                           (sum, element) => sum + element.scoreReward,
                         ),
-                        point: state.user.points,
+                    point: state.user.points,
                   ),
                 ),
                 const Spacer(),
@@ -162,14 +183,7 @@ class MainScreen extends StatelessWidget {
                   ),
                 ),
                 const Gap(14),
-                  AppButton(
-                  text: 'privacy policy',
-                  color: ButtonColors.purple,
-                  onPressed: () => context.push(
-                    '${RouteValue.home.path}/${RouteValue.privicy.path}',
-                  ),
-                ),
-                const Gap(14),
+            
               ],
             ),
           );
@@ -419,15 +433,21 @@ void showBuyHintDialog(BuildContext context) {
                 bottom: 20,
                 child: AppButton(
                   color: ButtonColors.yellow,
-                  text: (context.read<AppBloc>().state as AppLoaded).user.coins > 15 ?'buy' : 'not enough coins',
+                  text:
+                      (context.read<AppBloc>().state as AppLoaded).user.coins >
+                              15
+                          ? 'buy'
+                          : 'not enough coins',
                   width: 183,
                   height: 69,
                   onPressed: () {
                     context.pop();
-                    if( (context.read<AppBloc>().state  as AppLoaded).user.coins > 15) {
+                    if ((context.read<AppBloc>().state as AppLoaded)
+                            .user
+                            .coins >
+                        15) {
                       context.read<AppBloc>().add(BuyHint());
                     }
-
                   },
                 ),
               ),
@@ -563,8 +583,7 @@ class _RoundedPieChartState extends State<RoundedPieChart>
                 children: [
                   GradientText(widget.point.toString(), fontSize: 43),
                   CustomPaint(
-                    size:
-                         Size(294, 294),
+                    size: Size(294, 294),
                     painter: PieChartPainter(_animation.value, context,
                         isHomeScreen: widget.isHomeScreen),
                   ),
