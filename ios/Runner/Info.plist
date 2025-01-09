@@ -70,7 +70,5 @@
     <key>FacebookDisplayName</key>
     <string>Brainstorm Quest</string>
     <!-- FACEBOOK SDK CONFIG -->
-    <key>NSUserTrackingUsageDescription</key>
-        	<string>We use your device's IDFA (Identifier for Advertisers) to show relevant ads and improve your app experience.</string>
 </dict>
 </plist>

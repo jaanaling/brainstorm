@@ -1,7 +1,7 @@
 name: brainstorm_quest
 description: "A new Flutter project."
 publish_to: 'none'
-version: 1.0.0
+version: 1.2.0
 
 environment:
   sdk: ^3.5.4
@@ -27,7 +27,7 @@ dependencies:
   core_logic:
     git:
       url: https://github.com/Vennylost/core_logic.git
-      ref: 8707d6200ad620eaeb5f714355ab642f7cd22b33
+      ref: cf1c6788189d1391a15f2c64254f5b6198cc11f6
 
 dev_dependencies:
   flutter_test:

@@ -1,6 +1,4 @@
 PODS:
-  - advertising_id (0.0.1):
-    - Flutter
   - Amplitude (8.18.0):
     - AnalyticsConnector (~> 1.0.0)
   - amplitude_flutter (0.0.1):
@@ -107,7 +105,6 @@ PODS:
     - FlutterMacOS
 
 DEPENDENCIES:
-  - advertising_id (from `.symlinks/plugins/advertising_id/ios`)
   - amplitude_flutter (from `.symlinks/plugins/amplitude_flutter/ios`)
   - appsflyer_sdk (from `.symlinks/plugins/appsflyer_sdk/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/darwin`)
@@ -141,8 +138,6 @@ SPEC REPOS:
     - PromisesObjC
 
 EXTERNAL SOURCES:
-  advertising_id:
-    :path: ".symlinks/plugins/advertising_id/ios"
   amplitude_flutter:
     :path: ".symlinks/plugins/amplitude_flutter/ios"
   appsflyer_sdk:
@@ -169,7 +164,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/webview_flutter_wkwebview/darwin"
 
 SPEC CHECKSUMS:
-  advertising_id: ea8a9b898196a0673bad1b0fe6c50541d9295d02
   Amplitude: 184def4f87aa26f94a93a7faa334e06b1cae704d
   amplitude_flutter: 0f617f89d62b10c40a0ab14849e660a7c12e4e46
   AnalyticsConnector: a53214d38ae22734c6266106c0492b37832633a9
